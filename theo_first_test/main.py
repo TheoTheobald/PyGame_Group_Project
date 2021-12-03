@@ -15,6 +15,7 @@ pygame.init()
 scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
+fps=60 #frames per second
 
 #add music from https://freemusicarchive.org/ 
 pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
@@ -33,4 +34,4 @@ while True:
     
     
     pygame.display.update()
-    clock.tick(60)
+    clock.tick(fps)
