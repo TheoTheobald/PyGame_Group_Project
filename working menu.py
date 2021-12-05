@@ -4,12 +4,13 @@ Created on Sun Dec  5 13:32:08 2021
 
 @author: saree
 """
-
+#Import libraries
+import pygame
 import pygame, sys
-
 clock = pygame.time.Clock()
 from pygame.locals import *
 pygame.init()
+#global variables
 WIDTH = 800
 HEIGHT = 400
 pygame.display.set_caption('Grandads Treasure')
@@ -23,10 +24,11 @@ click = False
  
 def menu():
     while True:
- 
+        #size of the screen
         surface = pygame.Surface((WIDTH,HEIGHT))
+        #fill screen (colour)
         surface.fill('black')
-
+        #main title
         main_font = pygame.font.SysFont("Verdana", 40)
         text_surface = main_font.render('Grandads Treasure', True, 'white')
         screen.blit(surface,(0,0))  
@@ -34,7 +36,7 @@ def menu():
         
         mo_x, mo_y = pygame.mouse.get_pos()
  
-        
+        #size of rectangle buttons and their coordinates
         small_font = pygame.font.SysFont("Verdana", 20)
         instruct_surface = small_font.render('Instructions', True, 'black')
         instruct = pygame.Rect(30, 125, 200, 50)
@@ -45,14 +47,16 @@ def menu():
         if instruct.collidepoint((mo_x, mo_y)):
             if click:
                 instructions()
+        #collidepoint function -tests if coordinates of mouse in rectangle
         if start_game.collidepoint((mo_x, mo_y)):
             if click:
                 game()
         if quit_game.collidepoint((mo_x, mo_y)):
             if click:
-                exit_game()        
-        pygame.draw.rect(screen, ('yellow'), instruct)
-        screen.blit(instruct_surface,(70,140))
+                exit_game()  
+                
+        pygame.draw.rect(screen, ('yellow'), instruct)#colour of button
+        screen.blit(instruct_surface,(70,140))#positioning of text
         pygame.draw.rect(screen, ('green'), start_game)
         screen.blit(start_surface,(100,210))
         pygame.draw.rect(screen, ('red'), quit_game)
@@ -62,17 +66,17 @@ def menu():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == KEYDOWN:
+            if event.type == KEYDOWN:#detects if key pressed
                 if event.key == ESCAPE:
                     pygame.quit()
                     sys.exit()
-            if event.type == MOUSEBUTTONDOWN:
+            if event.type == MOUSEBUTTONDOWN: #if the button is pressed
                 if event.button == 1:
                     click = True
  
         pygame.display.update()
         clock.tick(60)
-        
+# Button leads to new screen         
 def instructions():
     running = True
     while running:
@@ -87,13 +91,13 @@ def instructions():
         
         pygame.display.update()
         clock.tick(60)        
- 
+
 def game():
     running = True
     while running:
         screen.fill(('white'))
         
-        #draw_text('game', font, (255, 255, 255), screen, 20, 20)
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -108,9 +112,6 @@ def game():
 def exit_game():
     running = True
     while running:
-        
- 
-       # draw_text('options', font, (255, 255, 255), screen, 20, 20)
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
