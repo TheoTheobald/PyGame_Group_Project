@@ -149,3 +149,10 @@ class Player(Character):
     def update(self):
         self.animatePlayer()
         self.getInput()
+        
+class Enemy(Character):
+    def __init__(self, pos):
+        Character.__init__(self, pos)
+        
+
+        

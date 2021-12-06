@@ -9,7 +9,7 @@ Level creator
 import pygame
 from tiles import Tile
 from settings import tileSize, scrnW
-from player import Player, Character
+from player import Player, Enemy
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -22,7 +22,7 @@ class Level:
     def placeTiles(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
-        self.characters = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
         
         for rowIndex, row in enumerate(layout):
             for colIndex, cell in enumerate(row):
@@ -35,9 +35,9 @@ class Level:
                     player = Player(((x + tileSize/4), y))
                     self.player.add(player)
                     self.playerActual = player
-                elif cell == 'C':
-                    char = Character(((x + tileSize/4), y))
-                    self.characters.add(char)
+                elif cell == 'E':
+                    enemy = Enemy(((x + tileSize/4), y))
+                    self.enemies.add(enemy)
                     
     def scroll(self):
         player = self.player.sprite
@@ -78,6 +78,21 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
+                    
+    def checkPlayerPos(self):
+        for enemy in self.enemies:
+            if enemy.rect.x > self.playerActual.rect.x:
+                enemy.facing = 1
+            if enemy.rect.x < self.playerActual.rect.x:
+                enemy.facing = 0
+            
+            
+            if self.playerActual.rect.y > enemy.rect.y - 50 and self.playerActual.rect.y < enemy.rect.y + 50:
+                if self.playerActual.rect.x > enemy.rect.x - 300 and self.playerActual.rect.x < enemy.rect.x + 300:
+                    enemy.shooting = True
+            else:
+                enemy.shooting = False
+                
 
         
     def run(self):
@@ -93,9 +108,10 @@ class Level:
         self.collisionY()
         self.player.draw(self.display)
         
-        # Character update
-        self.characters.draw(self.display)
-        self.characters.update(self.scrollSpeed)
+        # Enemy update
+        self.enemies.draw(self.display)
+        self.enemies.update(self.scrollSpeed)
+        self.checkPlayerPos()
         
         # Bullet stuff
         self.bullets.draw(self.display)
@@ -103,3 +119,6 @@ class Level:
         
         if self.playerActual.shooting:
             self.bullets.add(self.playerActual.shoot())
+        for enemy in self.enemies:
+            if enemy.shooting:
+                self.bullets.add(enemy.shoot())
