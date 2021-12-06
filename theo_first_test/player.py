@@ -21,6 +21,7 @@ class Character(pygame.sprite.Sprite):
         self.shooting = False
         self.bulletCooldown = pygame.time.get_ticks()
         self.canShoot = True
+        self.className = 'character'
         
         
         # Char movement
@@ -37,10 +38,10 @@ class Character(pygame.sprite.Sprite):
             LST = []
             for elem in animationTypes:
                 lst = []
-                frames = len(os.listdir(f"images/player/{elem}"))
+                frames = len(os.listdir(f"images/enemy/{elem}"))
                 
                 for i in range(frames):
-                    img = pygame.image.load(f"images/player/{elem}/{i}.png")
+                    img = pygame.image.load(f"images/enemy/{elem}/{i}.png")
                     img = pygame.transform.scale(img, (int(img.get_width() * 1.5), int(img.get_height() * 1.5)))
                     if j == 'left':
                         img = pygame.transform.flip(img, True, False)
@@ -97,7 +98,8 @@ class Character(pygame.sprite.Sprite):
         
 class Player(Character):
     def __init__(self, pos):
-        Character.__init__(self, pos)        
+        Character.__init__(self, pos)     
+        self.className = 'player'
         
         # Player movement
         self.direction = pygame.math.Vector2(0, 0)
@@ -160,6 +162,7 @@ class Player(Character):
 class Enemy(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
+        self.className = 'enemy'
         
     def update(self, xShift):
         Character.update(self)

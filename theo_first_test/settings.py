@@ -17,7 +17,7 @@ levelLayout = [
     'X___XXX_______XXX______________XX',
     'X_________P___________XXXX______X',
     'XXX_______XX________XX_______XX_X',
-    'X______E___________________XXXX_X',
+    'X______E__E________________XXXX_X',
     'X____XXXXXXXXXX_______X_________X',
     'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',]
 

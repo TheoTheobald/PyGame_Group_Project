@@ -21,7 +21,6 @@ pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
 
 def menu():
-    global click
     while True:
         #size of the screen
         surface = pygame.Surface((scrnW,scrnH))
