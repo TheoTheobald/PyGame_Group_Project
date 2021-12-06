@@ -12,9 +12,10 @@ from settings import tileSize, scrnW
 from player import Player
 
 class Level:
-    def __init__(self, levelLayout, surface):
-        self.displaySurface = surface
+    def __init__(self, levelLayout, scrn):
+        self.display = scrn
         self.placeTiles(levelLayout)
+        self.bullets = pygame.sprite.Group()
         
         self.scrollSpeed = 0
         
@@ -32,6 +33,7 @@ class Level:
                 elif cell == 'P':
                     player = Player(((x + tileSize/4), y))
                     self.player.add(player)
+                    self.playerActual = player
                     
     def scroll(self):
         player = self.player.sprite
@@ -79,11 +81,18 @@ class Level:
         
         # Level stuff
         self.tiles.update(self.scrollSpeed)
-        self.tiles.draw(self.displaySurface)
+        self.tiles.draw(self.display)
         self.scroll()
         
         # Player stuff
         self.player.update()
         self.collisionX()
         self.collisionY()
-        self.player.draw(self.displaySurface)
+        self.player.draw(self.display)
+        
+        # Bullet stuff
+        self.bullets.draw(self.display)
+        self.bullets.update()
+        
+        if self.playerActual.shooting:
+            self.bullets.add(self.playerActual.shoot())

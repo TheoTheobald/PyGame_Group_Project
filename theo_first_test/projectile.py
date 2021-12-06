@@ -9,10 +9,16 @@ Projectiles
 
 import pygame
 
-class Projectile():
+class Projectile(pygame.sprite.Sprite):
     def __init__(self, x, y, radius, colour, direction):
-        self.x = x
-        self.y = y
+        pygame.sprite.Sprite.__init__(self)
         self.radius = radius
         self.colour = colour
+        self.image = pygame.Surface((10, 5))
+        self.image.fill(colour)
+        self.rect = self.image.get_rect(center = (x, y))
         self.direction = direction
+        self.velocity = 16 * direction
+            
+    def update(self):
+        self.rect.x += self.velocity

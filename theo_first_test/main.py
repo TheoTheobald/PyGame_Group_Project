@@ -108,9 +108,10 @@ def game():
                     menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
-            
+                sys.exit()    
                 
+            # if event.type == pygame.K_SPACE:
+            #     level.bullets += level.player.shoot()
         
           
         scrn.fill('black')

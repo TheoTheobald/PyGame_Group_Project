@@ -8,6 +8,7 @@ Player for the game
 """
 
 import pygame, os
+from projectile import Projectile
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -17,6 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.frameIndex = 0
         self.updateTime = pygame.time.get_ticks()
         self.stance = 0
+        self.shooting = False
         
         
         # Player movement
@@ -46,6 +48,7 @@ class Player(pygame.sprite.Sprite):
              
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
+        self.bulletColour = pygame.Color(0, 255, 0)
         
     def animatePlayer(self):
         timeGap = 100 # Time waited before resetting image
@@ -76,6 +79,18 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_UP] and self.direction.y == 0:
             self.jump()
             
+        if keys[pygame.K_SPACE]:
+            self.shooting = True
+        else: self.shooting = False
+            
+    def shoot(self):
+        if self.facing == 0:
+            Dir = 1
+        elif self.facing == 1:
+            Dir = -1
+        return Projectile(self.rect.x, self.rect.y, 5, self.bulletColour, Dir)
+
+    
     def fall(self):
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
