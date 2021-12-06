@@ -6,7 +6,7 @@ Level creator
 
 @author: theot
 """
-import pygame
+import pygame, sys
 from tiles import Tile
 from settings import tileSize, scrnW
 from player import Player, Enemy
@@ -81,10 +81,13 @@ class Level:
                     
     def bulletcollision(self):
         player = self.player.sprite
+        bullet = self.bullets.sprite
+        
+        
         
         for bullet in self.bullets:
             for tile in self.tiles:
-                if tile.rect.colliderect(bullet.rect):
+                if bullet.rect.colliderect(tile.rect):
                     self.bullets.pop(self.bullets.index(bullet))
                     
     def checkPlayerPos(self):        
