@@ -22,3 +22,4 @@ class Projectile(pygame.sprite.Sprite):
             
     def update(self):
         self.rect.x += self.velocity
+        

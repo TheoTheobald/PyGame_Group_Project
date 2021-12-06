@@ -42,17 +42,6 @@ def menu():
         start_game = pygame.Rect(30, 200, 200, 50)
         quit_surface = small_font.render('Quit', True, 'black')
         quit_game = pygame.Rect(30, 275, 200, 50)
-        if instruct.collidepoint((mo_x, mo_y)):
-            if click:
-                instructions()
-        #collidepoint function -tests if coordinates of mouse in rectangle
-        if start_game.collidepoint((mo_x, mo_y)):
-            if click:
-                game()
-        if quit_game.collidepoint((mo_x, mo_y)):
-            if click:
-                 pygame.quit()
-                 sys.exit()
                 
         pygame.draw.rect(scrn, ('yellow'), instruct)#colour of button
         scrn.blit(instruct_surface,(70,140))#positioning of text
@@ -60,21 +49,25 @@ def menu():
         scrn.blit(start_surface,(100,210))
         pygame.draw.rect(scrn, ('red'), quit_game)
         scrn.blit(quit_surface,(100,285))
-        click = False
+        
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:#detects if key pressed
-                if event.key == pygame.K_ESCAPE:
+            if event.type == pygame.MOUSEBUTTONDOWN: #if the button is pressed
+                if instruct.collidepoint((mo_x, mo_y)):
+                    instructions()
+                #collidepoint function -tests if coordinates of mouse in rectangle
+                if start_game.collidepoint((mo_x, mo_y)):
+                    game()
+                if quit_game.collidepoint((mo_x, mo_y)):
                     pygame.quit()
                     sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN: #if the button is pressed
-                if event.button == 1:
-                    click = True
- 
+                    
         pygame.display.update()
         clock.tick(60)
+        
+        
 # Button leads to new screen         
 def instructions():
     running = True
@@ -108,9 +101,6 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()    
-                
-            # if event.type == pygame.K_SPACE:
-            #     level.bullets += level.player.shoot()
         
           
         scrn.fill('black')
@@ -119,37 +109,5 @@ def game():
         
         pygame.display.update()
         clock.tick(60)
-
-# def game():
-#     running = True
-#     while running:
-#         screen.fill(('white'))
-        
-        
-#         for event in pygame.event.get():
-#             if event.type == QUIT:
-#                 pygame.quit()
-#                 sys.exit()
-#             if event.type == KEYDOWN:
-#                 if event.key == K_ESCAPE:
-#                     running = False
-        
-#         pygame.display.update()
-#         clock.tick(60)
-# Exit the game
-# def exit_game():
-#     running = True
-#     while running:
-#         for event in pygame.event.get():
-#             if event.type == pygame.QUIT:
-#                 pygame.quit()
-#                 sys.exit()
-#             if event.type == pygame.MOUSEBUTTONDOWN:
-#                 if event.button == 1:
-#                     pygame.quit()
-                
-        
-#         pygame.display.update()
-#         clock.tick(60)
  
 menu()

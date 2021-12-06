@@ -64,6 +64,10 @@ class Level:
                     player.rect.left = tile.rect.right
                 elif player.direction.x > 0:
                     player.rect.right = tile.rect.left
+                    
+            for bullet in self.bullets.sprites():
+                if tile.rect.colliderect(bullet.rect):
+                    bullet.kill()
         
     def collisionY(self):
         player = self.player.sprite
@@ -79,31 +83,34 @@ class Level:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
                     
-    def bulletcollision(self):
+    def bulletHitsCharacter(self):
         player = self.player.sprite
-        bullet = self.bullets.sprite
         
+        for bullet in self.bullets.sprites():
+            if bullet.rect.colliderect(player.rect):
+                bullet.kill()
+                player.health -= 10
+            for enemy in self.enemies.sprites():
+                if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
+                    bullet.kill()
+                    enemy.health -= 10
+                    
         
-        
-        for bullet in self.bullets:
-            for tile in self.tiles:
-                if bullet.rect.colliderect(tile.rect):
-                    self.bullets.pop(self.bullets.index(bullet))
                     
     def checkPlayerPos(self):        
         player = self.player.sprite
         
         for enemy in self.enemies:
-            if enemy.rect.x > player.rect.x: # Facing left
+            if enemy.rect.x > player.rect.x and not enemy.dead: # Facing left
                 enemy.facing = 1
-            if enemy.rect.x < player.rect.x: # Facing right
+            if enemy.rect.x < player.rect.x and not enemy.dead: # Facing right
                 enemy.facing = 0
             
             if enemy.canShoot: # Shooting range, height and cooldown
                 if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
                     if player.rect.x > enemy.rect.x - 300 and player.rect.x < enemy.rect.x + 300:
                         enemy.shooting = True
-                        enemy.bulletCooldown = pygame.time.get_ticks()
+                        enemy.timeLastShot = pygame.time.get_ticks()
             else:
                 enemy.shooting = False
     
@@ -132,10 +139,14 @@ class Level:
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
         
+        for enemy in self.enemies:
+            enemy.healthBar(self.display)
+        
         
         # Bullet stuff
         self.bullets.draw(self.display)
         self.bullets.update()
+        self.bulletHitsCharacter()
         
         for player in self.player:
             if player.shooting:

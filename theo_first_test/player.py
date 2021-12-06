@@ -20,21 +20,23 @@ class Character(pygame.sprite.Sprite):
         self.updateTime = pygame.time.get_ticks()
         self.stance = 0
         self.shooting = False
-        self.bulletCooldown = pygame.time.get_ticks()
+        self.timeLastShot = pygame.time.get_ticks()
         self.canShoot = True
         self.className = 'character'
+        self.bulletCooldown = 1000
+        self.dead = False
 
 
         # Char movement
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.gravity = 1
-        self.jumpSpeed = -20
+        self.jumpSpeed = -18
 
         # Char appearance
         self.animations = []
         rightLeft = ['right', 'left']
-        animationTypes = ['Idle', 'Run', 'Jump']
+        animationTypes = ['Idle', 'Run', 'Jump', 'Death']
         for j in rightLeft:
             LST = []
             for elem in animationTypes:
@@ -61,6 +63,8 @@ class Character(pygame.sprite.Sprite):
             self.updateTime = pygame.time.get_ticks() # Update time since last update
             self.frameIndex += 1                       # Move frame forward 1
         if self.frameIndex >= len(self.animations[self.facing][self.stance]):
+            if self.stance == 3:
+                self.kill()
             self.frameIndex = 0
 
     def shoot(self):
@@ -75,11 +79,10 @@ class Character(pygame.sprite.Sprite):
         return Projectile(xPos, yPos, 5, self.bulletColour, Dir)
 
     def shootRate(self):
-        if self.bulletCooldown + 400 < pygame.time.get_ticks():
+        if self.timeLastShot + self.bulletCooldown < pygame.time.get_ticks() and not self.dead:
             self.canShoot = True
         else:
             self.canShoot = False
-
 
     def fall(self):
         self.direction.y += self.gravity
@@ -91,32 +94,41 @@ class Character(pygame.sprite.Sprite):
             self.falling = True
             self.frameIndex = 0
             self.stance = 2
+            
+    def die(self):
+        if self.health <= 0:
+            self.dead = True
+            self.stance = 3
 
+    def healthBar(self, scrn):
+        pygame.draw.rect(scrn, (255, 0, 0), (self.rect.x, self.rect.y - 10, 43, 5))
+        pygame.draw.rect(scrn, (0, 255, 0), (self.rect.x, self.rect.y - 10, (43 * (self.health/self.totalHealth)), 5))
+
+            
     def update(self):
         self.animatePlayer()
         self.shootRate()
+        self.die()
 
-    def healthBar(self,scrn):
-        self.display = scrn
-        pygame.draw.rect(self.display, (255,0,0), (self.rect.x, self.rect.y - 10, 30,5))
-        pygame.draw.rect(self.display, (0,255,0), (self.rect.x, self.rect.y - 10, self.health, 5))
 
 class Player(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
         self.className = 'player'
+        self.bulletCooldown = 200
 
         # Player movement
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.gravity = 1
         self.jumpSpeed = -20
-        self.health = 30
+        self.totalHealth = 500
+        self.health = 500
 
         # Player appearance
         self.animations = []
         rightLeft = ['right', 'left']
-        animationTypes = ['Idle', 'Run', 'Jump']
+        animationTypes = ['Idle', 'Run', 'Jump', 'Death']
         for j in rightLeft:
             LST = []
             for elem in animationTypes:
@@ -158,7 +170,7 @@ class Player(Character):
 
         if keys[pygame.K_SPACE] and self.canShoot:
             self.shooting = True
-            self.bulletCooldown = pygame.time.get_ticks()
+            self.timeLastShot = pygame.time.get_ticks()
         else: self.shooting = False
 
     def update(self):
@@ -166,10 +178,10 @@ class Player(Character):
         self.getInput()
 
 
-
 class Enemy(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
+        self.totalHealth = 20
         self.health = 20
         self.className = 'enemy'
 
