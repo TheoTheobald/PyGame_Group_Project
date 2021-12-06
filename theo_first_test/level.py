@@ -9,7 +9,7 @@ Level creator
 import pygame
 from tiles import Tile
 from settings import tileSize, scrnW
-from player import Player
+from player import Player, Character
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -22,6 +22,7 @@ class Level:
     def placeTiles(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        self.characters = pygame.sprite.Group()
         
         for rowIndex, row in enumerate(layout):
             for colIndex, cell in enumerate(row):
@@ -34,6 +35,9 @@ class Level:
                     player = Player(((x + tileSize/4), y))
                     self.player.add(player)
                     self.playerActual = player
+                elif cell == 'C':
+                    char = Character(((x + tileSize/4), y))
+                    self.characters.add(char)
                     
     def scroll(self):
         player = self.player.sprite
@@ -78,7 +82,6 @@ class Level:
         
     def run(self):
         
-        
         # Level stuff
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
@@ -89,6 +92,10 @@ class Level:
         self.collisionX()
         self.collisionY()
         self.player.draw(self.display)
+        
+        # Character update
+        self.characters.draw(self.display)
+        self.characters.update(self.scrollSpeed)
         
         # Bullet stuff
         self.bullets.draw(self.display)
