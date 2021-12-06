@@ -19,6 +19,7 @@ class Player(pygame.sprite.Sprite):
         self.updateTime = pygame.time.get_ticks()
         self.stance = 0
         self.shooting = False
+        self.bulletCooldown = pygame.time.get_ticks()
         
         
         # Player movement
@@ -62,12 +63,12 @@ class Player(pygame.sprite.Sprite):
     def getInput(self):
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
             self.direction.x = 1
             self.facing = 0
             if self.direction.y == 0:
                 self.stance = 1
-        elif keys[pygame.K_LEFT]:
+        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
             self.direction.x = -1
             self.facing = 1
             if self.direction.y == 0:
@@ -76,19 +77,24 @@ class Player(pygame.sprite.Sprite):
             self.direction.x = 0
             self.stance = 0
             
-        if keys[pygame.K_UP] and self.direction.y == 0:
+        if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.direction.y == 0:
             self.jump()
             
-        if keys[pygame.K_SPACE]:
+        if keys[pygame.K_SPACE] and (self.bulletCooldown + 400 < pygame.time.get_ticks()):
             self.shooting = True
+            self.bulletCooldown = pygame.time.get_ticks()
         else: self.shooting = False
             
     def shoot(self):
         if self.facing == 0:
             Dir = 1
+            xPos = self.rect.x + 50
+            yPos = self.rect.y + 25
         elif self.facing == 1:
             Dir = -1
-        return Projectile(self.rect.x, self.rect.y, 5, self.bulletColour, Dir)
+            xPos = self.rect.x - 10
+            yPos = self.rect.y + 25
+        return Projectile(xPos, yPos, 5, self.bulletColour, Dir)
 
     
     def fall(self):

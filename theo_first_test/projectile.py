@@ -18,7 +18,7 @@ class Projectile(pygame.sprite.Sprite):
         self.image.fill(colour)
         self.rect = self.image.get_rect(center = (x, y))
         self.direction = direction
-        self.velocity = 16 * direction
+        self.velocity = 14 * direction
             
     def update(self):
         self.rect.x += self.velocity
