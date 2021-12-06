@@ -9,6 +9,7 @@ import pygame
 import pygame, sys
 clock = pygame.time.Clock()
 from pygame.locals import *
+from main.py import main
 pygame.init()
 #global variables
 WIDTH = 800
@@ -17,8 +18,6 @@ pygame.display.set_caption('Grandads Treasure')
 screen = pygame.display.set_mode((WIDTH, HEIGHT),0,32)
  
 font = pygame.font.SysFont("Verdana", 20)
-
- 
  
 click = False
  
@@ -50,7 +49,7 @@ def menu():
         #collidepoint function -tests if coordinates of mouse in rectangle
         if start_game.collidepoint((mo_x, mo_y)):
             if click:
-                game()
+                main()
         if quit_game.collidepoint((mo_x, mo_y)):
             if click:
                 exit_game()  
