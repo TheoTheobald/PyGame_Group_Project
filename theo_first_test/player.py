@@ -20,6 +20,7 @@ class Character(pygame.sprite.Sprite):
         self.stance = 0
         self.shooting = False
         self.bulletCooldown = pygame.time.get_ticks()
+        self.canShoot = True
         
         
         # Char movement
@@ -70,6 +71,12 @@ class Character(pygame.sprite.Sprite):
             xPos = self.rect.x - 10
             yPos = self.rect.y + 25
         return Projectile(xPos, yPos, 5, self.bulletColour, Dir)
+    
+    def shootRate(self):
+        if self.bulletCooldown + 400 < pygame.time.get_ticks():
+            self.canShoot = True
+        else:
+            self.canShoot = False
 
     
     def fall(self):
@@ -83,9 +90,9 @@ class Character(pygame.sprite.Sprite):
             self.frameIndex = 0
             self.stance = 2
             
-    def update(self, xShift):
-        self.rect.x += xShift
+    def update(self):
         self.animatePlayer()
+        self.shootRate()
         
         
 class Player(Character):
@@ -141,18 +148,20 @@ class Player(Character):
         if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.direction.y == 0:
             self.jump()
             
-        if keys[pygame.K_SPACE] and (self.bulletCooldown + 400 < pygame.time.get_ticks()):
+        if keys[pygame.K_SPACE] and self.canShoot:
             self.shooting = True
             self.bulletCooldown = pygame.time.get_ticks()
         else: self.shooting = False
         
     def update(self):
-        self.animatePlayer()
+        Character.update(self)
         self.getInput()
         
 class Enemy(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
         
-
+    def update(self, xShift):
+        Character.update(self)
+        self.rect.x += xShift
         

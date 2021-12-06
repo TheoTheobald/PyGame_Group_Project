@@ -34,7 +34,6 @@ class Level:
                 elif cell == 'P':
                     player = Player(((x + tileSize/4), y))
                     self.player.add(player)
-                    self.playerActual = player
                 elif cell == 'E':
                     enemy = Enemy(((x + tileSize/4), y))
                     self.enemies.add(enemy)
@@ -79,17 +78,28 @@ class Level:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
                     
-    def checkPlayerPos(self):
+    def bulletcollision(self):
+        player = self.player.sprite
+        
+        for bullet in self.bullets:
+            for tile in self.tiles:
+                if tile.rect.colliderect(bullet.rect):
+                    self.bullets.pop(self.bullets.index(bullet))
+                    
+    def checkPlayerPos(self):        
+        player = self.player.sprite
+        
         for enemy in self.enemies:
-            if enemy.rect.x > self.playerActual.rect.x:
+            if enemy.rect.x > player.rect.x: # Facing left
                 enemy.facing = 1
-            if enemy.rect.x < self.playerActual.rect.x:
+            if enemy.rect.x < player.rect.x: # Facing right
                 enemy.facing = 0
             
-            
-            if self.playerActual.rect.y > enemy.rect.y - 50 and self.playerActual.rect.y < enemy.rect.y + 50:
-                if self.playerActual.rect.x > enemy.rect.x - 300 and self.playerActual.rect.x < enemy.rect.x + 300:
-                    enemy.shooting = True
+            if enemy.canShoot: # Shooting range, height and cooldown
+                if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
+                    if player.rect.x > enemy.rect.x - 300 and player.rect.x < enemy.rect.x + 300:
+                        enemy.shooting = True
+                        enemy.bulletCooldown = pygame.time.get_ticks()
             else:
                 enemy.shooting = False
                 
@@ -117,8 +127,9 @@ class Level:
         self.bullets.draw(self.display)
         self.bullets.update()
         
-        if self.playerActual.shooting:
-            self.bullets.add(self.playerActual.shoot())
+        for player in self.player:
+            if player.shooting:
+                self.bullets.add(player.shoot())
         for enemy in self.enemies:
             if enemy.shooting:
                 self.bullets.add(enemy.shoot())
