@@ -13,6 +13,7 @@ from projectile import Projectile
 class Character(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
+        
         self.falling = False
         self.facing = 0
         self.frameIndex = 0
@@ -94,7 +95,11 @@ class Character(pygame.sprite.Sprite):
         self.animatePlayer()
         self.shootRate()
         
-        
+    def healthBar(self,scrn):
+        self.display = scrn
+        pygame.draw.rect(self.display, (255,0,0), (self.rect.x, self.rect.y - 10, 30,5))
+        pygame.draw.rect(self.display, (0,255,0), (self.rect.x, self.rect.y - 10, self.health, 5))
+          
 class Player(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)        
@@ -104,6 +109,7 @@ class Player(Character):
         self.speed = 5
         self.gravity = 1
         self.jumpSpeed = -20
+        self.health = 30
         
         # Player appearance
         self.animations = []
@@ -157,11 +163,18 @@ class Player(Character):
         Character.update(self)
         self.getInput()
         
+    
+        
 class Enemy(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
+        self.health = 20
         
     def update(self, xShift):
         Character.update(self)
         self.rect.x += xShift
+    
+    
+
+        
         

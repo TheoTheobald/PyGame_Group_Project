@@ -19,6 +19,7 @@ class Level:
         
         self.scrollSpeed = 0
         
+        
     def placeTiles(self, layout):
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
@@ -102,7 +103,11 @@ class Level:
                         enemy.bulletCooldown = pygame.time.get_ticks()
             else:
                 enemy.shooting = False
-                
+    
+    # def healthBar(self):
+    #     # player = self.player.sprite
+    #     pygame.draw.rect(self.display, (255,0,0), (self.player.rect.x, self.player.rect.y - 10, 30,5))
+    #     # pygame.draw.rect(self.display, (0,255,0), (player.rect.x, player.rect.y - 10, self.health, 5))
 
         
     def run(self):
@@ -117,11 +122,13 @@ class Level:
         self.collisionX()
         self.collisionY()
         self.player.draw(self.display)
+        self.player.sprite.healthBar(self.display)
         
         # Enemy update
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
+        
         
         # Bullet stuff
         self.bullets.draw(self.display)
