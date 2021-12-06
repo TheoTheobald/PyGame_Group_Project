@@ -16,9 +16,7 @@ scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
 
-#add music from https://freemusicarchive.org/ 
-pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-pygame.mixer.music.play(loops=-1) 
+
 pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
 
@@ -69,7 +67,7 @@ def menu():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:#detects if key pressed
-                if event.key == ESCAPE:
+                if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN: #if the button is pressed
@@ -88,21 +86,33 @@ def instructions():
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == K_ESCAPE:
+                if event.key == pygame.K_ESCAPE:
                     running = False
         
         pygame.display.update()
         clock.tick(60)        
 
+def music():
+    #add music from https://freemusicarchive.org/ 
+    pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
+    pygame.mixer.music.play(loops=-1)  
+
 def game():
+    
+    music()
     while True:
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.mixer.music.stop()
+                    menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            
                 
         
-           
+          
         scrn.fill('black')
         level.run()
         
