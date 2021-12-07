@@ -6,61 +6,96 @@ Level with camera that follows player - attempt 1
 
 This is a temporary script file.
 """
+
 import pygame, sys
 from settings import *
 from tiles import Tile
 from level import Level
 
+
 pygame.init()
 scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
+#bg = pygame.image.load('button1.png')
 
 
 pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
-
+def intro_music(): 
+   # add music from https://freemusicarchive.org/ 
+    pygame.mixer.music.load("music/bgm0.mp3")
+    pygame.mixer.music.play(loops=-1)  
+    
+    
 def menu():
+    intro_music()
     while True:
+        
         #size of the screen
         surface = pygame.Surface((scrnW,scrnH))
         #fill screen (colour)
         surface.fill('black')
+       # scrn.blit(bg, (0,0))
         #main title
-        main_font = pygame.font.SysFont("Verdana", 40)
-        text_surface = main_font.render('Grandads Treasure', True, 'white')
+        main_font = pygame.font.SysFont("Lucida Calligraphy", 60)
+        text_surface = main_font.render('GRANDADS TREASURE', True, 'white')
         scrn.blit(surface,(0,0))  
-        scrn.blit(text_surface,(200,10))
+        scrn.blit(text_surface,(200,50))
         
         mo_x, mo_y = pygame.mouse.get_pos()
+       
  
         #size of rectangle buttons and their coordinates
         small_font = pygame.font.SysFont("Verdana", 20)
-        instruct_surface = small_font.render('Instructions', True, 'black')
-        instruct = pygame.Rect(30, 125, 200, 50)
-        start_surface = small_font.render('Start', True, 'black')
-        start_game = pygame.Rect(30, 200, 200, 50)
-        quit_surface = small_font.render('Quit', True, 'black')
-        quit_game = pygame.Rect(30, 275, 200, 50)
-                
-        pygame.draw.rect(scrn, ('yellow'), instruct)#colour of button
-        scrn.blit(instruct_surface,(70,140))#positioning of text
-        pygame.draw.rect(scrn, ('green'), start_game)
-        scrn.blit(start_surface,(100,210))
-        pygame.draw.rect(scrn, ('red'), quit_game)
-        scrn.blit(quit_surface,(100,285))
+
+    
+        #load images
+        instruct = pygame.image.load('button1.png')
+        start = pygame.image.load('button2.png')
+        end = pygame.image.load('button3.png')
+        #makes drawing faster 
+        instruct.convert()
+        start.convert()
+        end.convert()
         
+        #rescale the images
+        img_width = 0.75
+        img_height = 0.5
+        instruct = pygame.transform.scale(instruct, (int(instruct.get_width() * img_width), int(instruct.get_height() * img_height)))
+        start = pygame.transform.scale(start, (int(start.get_width() * img_width), int(start.get_height() * img_height)))
+        end = pygame.transform.scale(end, (int(end.get_width() * img_width), int(end.get_height() * img_height)))
+
+       
+        #returns a rectangular object from the image
+        rect1 = instruct.get_rect()
+        rect2 = start.get_rect()
+        rect3 = end.get_rect()
+        #centre image rectangle to these coordinates
+        FROM_LEFT = 100
+        DOWN = 200
+        NEXT = 100
+        
+        rect1.topleft = (FROM_LEFT,DOWN)
+        rect2.topleft = (FROM_LEFT, DOWN + NEXT)
+        rect3.topleft = (FROM_LEFT, DOWN + NEXT + NEXT)
+        #display image
+        scrn.blit(instruct, rect1)
+        scrn.blit(start, rect2)
+        scrn.blit(end, rect3)
+        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN: #if the button is pressed
-                if instruct.collidepoint((mo_x, mo_y)):
+                if rect1.collidepoint((mo_x, mo_y)):
                     instructions()
                 #collidepoint function -tests if coordinates of mouse in rectangle
-                if start_game.collidepoint((mo_x, mo_y)):
+                if rect2.collidepoint((mo_x, mo_y)):
                     game()
-                if quit_game.collidepoint((mo_x, mo_y)):
+                if rect3.collidepoint((mo_x, mo_y)):
                     pygame.quit()
                     sys.exit()
                     
@@ -70,28 +105,39 @@ def menu():
         
 # Button leads to new screen         
 def instructions():
+
     running = True
     while running:
+        mo_x, mo_y = pygame.mouse.get_pos()
         scrn.fill(('white'))
+        back = pygame.image.load('button4.png')
+        back.convert()
+        back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
+        rect4 = back.get_rect()
+        rect4.topleft = (5,30)
+        scrn.blit(back, rect4)
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if rect4.collidepoint((mo_x, mo_y)):
+                    menu()
+               # if event.key == pygame.K_ESCAPE:
                     running = False
         
         pygame.display.update()
         clock.tick(60)        
 
-# def music():
-#     #add music from https://freemusicarchive.org/ 
-#     pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-#     pygame.mixer.music.play(loops=-1)  
+def music(): 
+   # add music from https://freemusicarchive.org/ 
+    pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
+    pygame.mixer.music.play(loops=-1)  
 
 def game():
     
-    #music()
+    music()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
