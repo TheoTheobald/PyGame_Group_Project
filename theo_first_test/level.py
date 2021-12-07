@@ -11,6 +11,7 @@ from tiles import Tile
 from settings import tileSize, scrnW
 from player import Player, Enemy
 from items import Healthpack
+from bossenemy import BossEnemy
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -43,6 +44,9 @@ class Level:
                 elif cell == 'H':
                     healthpack = Healthpack(((x + tileSize/5), y + 20))
                     self.items.add(healthpack)
+                elif cell == 'B':
+                    boss = BossEnemy((x, y))
+                    self.enemies.add(boss)
                     
     def scroll(self):
         player = self.player.sprite
@@ -109,29 +113,27 @@ class Level:
                     player.health += item.healthRestored
                     item.kill()
                     
-    def checkPlayerPos(self):        
+    def checkPlayerPos(self):
         player = self.player.sprite
         
         for enemy in self.enemies:
-            if enemy.rect.x > player.rect.x and not enemy.dead: # Facing left
-                enemy.facing = 1
-            if enemy.rect.x < player.rect.x and not enemy.dead: # Facing right
-                enemy.facing = 0
-            
-            if enemy.canShoot: # Shooting range, height and cooldown
-                if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
-                    if player.rect.x > enemy.rect.x - 300 and player.rect.x < enemy.rect.x + 300:
-                        enemy.shooting = True
-                        enemy.timeLastShot = pygame.time.get_ticks()
+            if enemy.className == 'boss':
+                pass
             else:
-                enemy.shooting = False
+                if enemy.rect.x > player.rect.x and not enemy.dead: # Facing left
+                    enemy.facing = 1
+                if enemy.rect.x < player.rect.x and not enemy.dead: # Facing right
+                    enemy.facing = 0
+                
+                if enemy.canShoot: # Shooting range, height and cooldown
+                    if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
+                        if player.rect.x > enemy.rect.x - 300 and player.rect.x < enemy.rect.x + 300:
+                            enemy.shooting = True
+                            enemy.timeLastShot = pygame.time.get_ticks()
+                else:
+                    enemy.shooting = False
+ 
     
-    # def healthBar(self):
-    #     # player = self.player.sprite
-    #     pygame.draw.rect(self.display, (255,0,0), (self.player.rect.x, self.player.rect.y - 10, 30,5))
-    #     # pygame.draw.rect(self.display, (0,255,0), (player.rect.x, player.rect.y - 10, self.health, 5))
-
-        
     def run(self):
         
         # Level stuff
@@ -169,5 +171,5 @@ class Level:
             if player.shooting:
                 self.bullets.add(player.shoot())
         for enemy in self.enemies:
-            if enemy.shooting:
+            if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
