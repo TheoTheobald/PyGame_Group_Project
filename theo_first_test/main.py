@@ -84,14 +84,14 @@ def instructions():
         pygame.display.update()
         clock.tick(60)        
 
-def music():
-    #add music from https://freemusicarchive.org/ 
-    pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-    pygame.mixer.music.play(loops=-1)  
+# def music():
+#     #add music from https://freemusicarchive.org/ 
+#     pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
+#     pygame.mixer.music.play(loops=-1)  
 
 def game():
     
-    music()
+    #music()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
@@ -100,7 +100,9 @@ def game():
                     menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()   
+                sys.exit() 
+            if level.playerDead:
+                menu()
         
           
         scrn.fill('black')

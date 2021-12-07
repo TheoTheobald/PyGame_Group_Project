@@ -32,14 +32,14 @@ class BossEnemy(pygame.sprite.Sprite):
         frames = len(os.listdir("images/boss"))
         for i in range(frames):
             img = pygame.image.load(f"images/boss/{i}.png")
-            img = pygame.transform.scale(img, (int(img.get_width() * 1.5), int(img.get_height() * 1.5)))
+            img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
             self.animations += [img]
             
         self.image = self.animations[self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
     
     def animate(self):
-        timeGap = 100 # Time waited before resetting image
+        timeGap = 200 # Time waited before resetting image
         self.image = self.animations[self.frameIndex] # Update image to match current frame
         if pygame.time.get_ticks() - self.updateTime > timeGap: # If time since last update has reached timeGap
             self.updateTime = pygame.time.get_ticks() # Update time since last update
@@ -53,3 +53,4 @@ class BossEnemy(pygame.sprite.Sprite):
             
     def update(self, xShift):
         self.rect.x += xShift
+        self.animate()

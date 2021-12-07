@@ -18,6 +18,7 @@ class Level:
         self.display = scrn
         self.placeTiles(levelLayout)
         self.bullets = pygame.sprite.Group()
+        self.playerDead = False
         
         self.scrollSpeed = 0
         
@@ -36,16 +37,16 @@ class Level:
                     tile = Tile((x, y), tileSize)
                     self.tiles.add(tile)
                 elif cell == 'P':
-                    player = Player(((x + tileSize/4), y))
+                    player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy(((x + tileSize/4), y))
+                    enemy = Enemy(((x + tileSize/4), y + 9))
                     self.enemies.add(enemy)
                 elif cell == 'H':
-                    healthpack = Healthpack(((x + tileSize/5), y + 20))
+                    healthpack = Healthpack(((x + tileSize/5), y + 29))
                     self.items.add(healthpack)
                 elif cell == 'B':
-                    boss = BossEnemy((x, y))
+                    boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
                     
     def scroll(self):
@@ -133,6 +134,9 @@ class Level:
                 else:
                     enemy.shooting = False
  
+    def checkDead(self):
+        if self.player.sprite.dead:
+            self.playerDead = True
     
     def run(self):
         
@@ -147,11 +151,13 @@ class Level:
         self.items.update(self.scrollSpeed)
         
         # Player stuff
-        self.player.update()
-        self.collisionX()
-        self.collisionY()
-        self.player.draw(self.display)
-        self.player.sprite.healthBar(self.display)
+        if not self.playerDead:
+            self.player.update()
+            self.collisionX()
+            self.collisionY()
+            self.player.draw(self.display)
+            self.player.sprite.healthBar(self.display)
+            self.checkDead()
         
         # Enemy update
         self.enemies.draw(self.display)
