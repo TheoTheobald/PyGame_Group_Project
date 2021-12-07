@@ -14,19 +14,23 @@ from settings import *
 class Character(pygame.sprite.Sprite):
     def __init__(self, pos):
         pygame.sprite.Sprite.__init__(self)
-
+        
+        # Appearance params
         self.falling = False
         self.facing = 0
         self.frameIndex = 0
         self.updateTime = pygame.time.get_ticks()
         self.stance = 0
+        self.className = 'character'
+        self.getSprites(pos)
+        
+        # Combat
+        self.canShoot = True
         self.shooting = False
         self.timeLastShot = pygame.time.get_ticks()
-        self.canShoot = True
-        self.className = 'character'
         self.bulletCooldown = 1000
+        self.bulletColour = RED
         self.dead = False
-
 
         # Char movement
         self.direction = pygame.math.Vector2(0, 0)
@@ -34,7 +38,7 @@ class Character(pygame.sprite.Sprite):
         self.gravity = 1
         self.jumpSpeed = -18
 
-        # Char appearance
+    def getSprites(self, pos):
         self.animations = []
         rightLeft = ['right', 'left']
         animationTypes = ['Idle', 'Run', 'Jump', 'Death']
@@ -42,21 +46,19 @@ class Character(pygame.sprite.Sprite):
             LST = []
             for elem in animationTypes:
                 lst = []
-                frames = len(os.listdir(f"images/enemy/{elem}"))
+                frames = len(os.listdir(f"images/{self.className}/{elem}"))
 
                 for i in range(frames):
-                    img = pygame.image.load(f"images/enemy/{elem}/{i}.png")
+                    img = pygame.image.load(f"images/{self.className}/{elem}/{i}.png")
                     img = pygame.transform.scale(img, (int(img.get_width() * 1.5), int(img.get_height() * 1.5)))
                     if j == 'left':
                         img = pygame.transform.flip(img, True, False)
                     lst += [img]
                 LST += [lst]
             self.animations += [LST]
-
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
-        self.bulletColour = RED
-
+    
     def animatePlayer(self):
         timeGap = 100 # Time waited before resetting image
         self.image = self.animations[self.facing][self.stance][self.frameIndex] # Update image to match current stance and frame
@@ -104,7 +106,6 @@ class Character(pygame.sprite.Sprite):
     def healthBar(self, scrn):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 43, 5))
         pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (43 * (self.health/self.totalHealth)), 5))
-
             
     def update(self):
         self.animatePlayer()
@@ -116,38 +117,17 @@ class Player(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
         self.className = 'player'
-        self.bulletCooldown = 200
 
-        # Player movement
-        self.direction = pygame.math.Vector2(0, 0)
-        self.speed = 5
-        self.gravity = 1
-        self.jumpSpeed = -20
+        # Player combat
+        self.bulletCooldown = 200
+        self.bulletColour = GREEN
         self.totalHealth = 500
         self.health = 500
 
         # Player appearance
-        self.animations = []
-        rightLeft = ['right', 'left']
-        animationTypes = ['Idle', 'Run', 'Jump', 'Death']
-        for j in rightLeft:
-            LST = []
-            for elem in animationTypes:
-                lst = []
-                frames = len(os.listdir(f"images/player/{elem}"))
-
-                for i in range(frames):
-                    img = pygame.image.load(f"images/player/{elem}/{i}.png")
-                    img = pygame.transform.scale(img, (int(img.get_width() * 1.5), int(img.get_height() * 1.5)))
-                    if j == 'left':
-                        img = pygame.transform.flip(img, True, False)
-                    lst += [img]
-                LST += [lst]
-            self.animations += [LST]
-
+        self.getSprites(pos)
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
-        self.bulletColour = GREEN
 
     def getInput(self):
         keys = pygame.key.get_pressed()
@@ -185,6 +165,7 @@ class Enemy(Character):
         self.totalHealth = 60
         self.health = 60
         self.className = 'enemy'
+        self.getSprites(pos)
 
     def update(self, xShift):
         Character.update(self)
