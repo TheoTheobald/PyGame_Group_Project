@@ -22,16 +22,16 @@ level = Level(levelLayout, scrn)
 
 pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
-def intro_music(): 
-   # add music from https://freemusicarchive.org/ 
+def intro_music():
+   # add music from https://freemusicarchive.org/
     pygame.mixer.music.load("music/bgm0.mp3")
-    pygame.mixer.music.play(loops=-1)  
-    
-    
+    pygame.mixer.music.play(loops=-1)
+
+
 def menu():
     intro_music()
     while True:
-        
+
         #size of the screen
         surface = pygame.Surface((scrnW,scrnH))
         #fill screen (colour)
@@ -40,25 +40,25 @@ def menu():
         #main title
         main_font = pygame.font.SysFont("Lucida Calligraphy", 60)
         text_surface = main_font.render('GRANDADS TREASURE', True, 'white')
-        scrn.blit(surface,(0,0))  
+        scrn.blit(surface,(0,0))
         scrn.blit(text_surface,(200,50))
-        
+
         mo_x, mo_y = pygame.mouse.get_pos()
-       
- 
+
+
         #size of rectangle buttons and their coordinates
         small_font = pygame.font.SysFont("Verdana", 20)
 
-    
+
         #load images
         instruct = pygame.image.load('button1.png')
         start = pygame.image.load('button2.png')
         end = pygame.image.load('button3.png')
-        #makes drawing faster 
+        #makes drawing faster
         instruct.convert()
         start.convert()
         end.convert()
-        
+
         #rescale the images
         img_width = 0.75
         img_height = 0.5
@@ -66,7 +66,7 @@ def menu():
         start = pygame.transform.scale(start, (int(start.get_width() * img_width), int(start.get_height() * img_height)))
         end = pygame.transform.scale(end, (int(end.get_width() * img_width), int(end.get_height() * img_height)))
 
-       
+
         #returns a rectangular object from the image
         rect1 = instruct.get_rect()
         rect2 = start.get_rect()
@@ -75,7 +75,7 @@ def menu():
         FROM_LEFT = 100
         DOWN = 200
         NEXT = 100
-        
+
         rect1.topleft = (FROM_LEFT,DOWN)
         rect2.topleft = (FROM_LEFT, DOWN + NEXT)
         rect3.topleft = (FROM_LEFT, DOWN + NEXT + NEXT)
@@ -83,7 +83,7 @@ def menu():
         scrn.blit(instruct, rect1)
         scrn.blit(start, rect2)
         scrn.blit(end, rect3)
-        
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
@@ -98,12 +98,12 @@ def menu():
                 if rect3.collidepoint((mo_x, mo_y)):
                     pygame.quit()
                     sys.exit()
-                    
+
         pygame.display.update()
         clock.tick(60)
-        
-        
-# Button leads to new screen         
+
+
+# Button leads to new screen
 def instructions():
 
     running = True
@@ -116,7 +116,7 @@ def instructions():
         rect4 = back.get_rect()
         rect4.topleft = (5,30)
         scrn.blit(back, rect4)
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -126,17 +126,17 @@ def instructions():
                     menu()
                # if event.key == pygame.K_ESCAPE:
                     running = False
-        
-        pygame.display.update()
-        clock.tick(60)        
 
-def music(): 
-   # add music from https://freemusicarchive.org/ 
+        pygame.display.update()
+        clock.tick(60)
+
+def music():
+   # add music from https://freemusicarchive.org/
     pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-    pygame.mixer.music.play(loops=-1)  
+    pygame.mixer.music.play(loops=-1)
 
 def game():
-    
+
     music()
     while True:
         for event in pygame.event.get():
@@ -146,16 +146,16 @@ def game():
                     menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit() 
+                sys.exit()
             if level.playerDead:
                 menu()
-        
-          
+
+
         scrn.fill('black')
         level.run()
-        
-        
+
+
         pygame.display.update()
         clock.tick(60)
- 
+
 menu()
