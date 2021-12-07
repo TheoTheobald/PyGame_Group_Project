@@ -10,6 +10,7 @@ import pygame, sys
 from tiles import Tile
 from settings import tileSize, scrnW
 from player import Player, Enemy
+from items import Healthpack
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -24,6 +25,7 @@ class Level:
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.enemies = pygame.sprite.Group()
+        self.items = pygame.sprite.Group()
         
         for rowIndex, row in enumerate(layout):
             for colIndex, cell in enumerate(row):
@@ -38,6 +40,9 @@ class Level:
                 elif cell == 'E':
                     enemy = Enemy(((x + tileSize/4), y))
                     self.enemies.add(enemy)
+                elif cell == 'H':
+                    healthpack = Healthpack(((x + tileSize/5), y + 20))
+                    self.items.add(healthpack)
                     
     def scroll(self):
         player = self.player.sprite
@@ -95,7 +100,14 @@ class Level:
                     bullet.kill()
                     enemy.health -= 10
                     
+    def pickupItem(self):
+        player = self.player.sprite
         
+        for item in self.items.sprites():
+            if item.rect.colliderect(player.rect):
+                if item.className == 'healthpack':
+                    player.health += item.healthRestored
+                    item.kill()
                     
     def checkPlayerPos(self):        
         player = self.player.sprite
@@ -126,6 +138,8 @@ class Level:
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
+        self.items.draw(self.display)
+        self.pickupItem()
         
         # Player stuff
         self.player.update()

@@ -100,7 +100,7 @@ def game():
                     menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()    
+                sys.exit()   
         
           
         scrn.fill('black')

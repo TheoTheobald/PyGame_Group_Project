@@ -9,6 +9,7 @@ Player for the game
 
 import pygame, os
 from projectile import Projectile
+from settings import *
 
 class Character(pygame.sprite.Sprite):
     def __init__(self, pos):
@@ -54,7 +55,7 @@ class Character(pygame.sprite.Sprite):
 
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
-        self.bulletColour = pygame.Color(255, 0, 0)
+        self.bulletColour = RED
 
     def animatePlayer(self):
         timeGap = 100 # Time waited before resetting image
@@ -101,8 +102,8 @@ class Character(pygame.sprite.Sprite):
             self.stance = 3
 
     def healthBar(self, scrn):
-        pygame.draw.rect(scrn, (255, 0, 0), (self.rect.x, self.rect.y - 10, 43, 5))
-        pygame.draw.rect(scrn, (0, 255, 0), (self.rect.x, self.rect.y - 10, (43 * (self.health/self.totalHealth)), 5))
+        pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 43, 5))
+        pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (43 * (self.health/self.totalHealth)), 5))
 
             
     def update(self):
@@ -146,32 +147,32 @@ class Player(Character):
 
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
-        self.bulletColour = pygame.Color(0, 255, 0)
+        self.bulletColour = GREEN
 
     def getInput(self):
         keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            self.direction.x = 1
-            self.facing = 0
-            if self.direction.y == 0:
-                self.stance = 1
-        elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            self.direction.x = -1
-            self.facing = 1
-            if self.direction.y == 0:
-                self.stance = 1
-        else:
-            self.direction.x = 0
-            self.stance = 0
-
-        if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.direction.y == 0:
-            self.jump()
-
-        if keys[pygame.K_SPACE] and self.canShoot:
-            self.shooting = True
-            self.timeLastShot = pygame.time.get_ticks()
-        else: self.shooting = False
+        if not self.dead:
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                self.direction.x = 1
+                self.facing = 0
+                if self.direction.y == 0:
+                    self.stance = 1
+            elif keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                self.direction.x = -1
+                self.facing = 1
+                if self.direction.y == 0:
+                    self.stance = 1
+            else:
+                self.direction.x = 0
+                self.stance = 0
+    
+            if (keys[pygame.K_UP] or keys[pygame.K_w]) and self.direction.y == 0:
+                self.jump()
+    
+            if keys[pygame.K_SPACE] and self.canShoot:
+                self.shooting = True
+                self.timeLastShot = pygame.time.get_ticks()
+            else: self.shooting = False
 
     def update(self):
         Character.update(self)
@@ -181,8 +182,8 @@ class Player(Character):
 class Enemy(Character):
     def __init__(self, pos):
         Character.__init__(self, pos)
-        self.totalHealth = 20
-        self.health = 20
+        self.totalHealth = 60
+        self.health = 60
         self.className = 'enemy'
 
     def update(self, xShift):
