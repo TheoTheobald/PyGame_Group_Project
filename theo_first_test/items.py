@@ -21,3 +21,6 @@ class Healthpack(pygame.sprite.Sprite):
         self.image = pygame.image.load("images/items/healthpack.png")
         self.rect = self.image.get_rect(topleft = self.pos)
         self.healthRestored = 150
+        
+    def update(self, xShift):
+        self.rect.x += xShift

@@ -138,8 +138,11 @@ class Level:
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
+        
+        # Items
         self.items.draw(self.display)
         self.pickupItem()
+        self.items.update(self.scrollSpeed)
         
         # Player stuff
         self.player.update()
