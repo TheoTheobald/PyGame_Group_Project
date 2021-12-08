@@ -139,7 +139,7 @@ def music():
     pygame.mixer.music.play(loops=-1)
 
 def game():
-
+    global level
     music()
     while True:
         for event in pygame.event.get():
@@ -151,6 +151,7 @@ def game():
                 pygame.quit()
                 sys.exit()
             if level.playerDead:
+                level = Level(levelLayout, scrn)
                 menu()
 
 
