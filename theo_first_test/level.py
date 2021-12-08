@@ -9,7 +9,7 @@ Level creator
 import pygame, sys
 from tiles import *
 from settings import tileSize, scrnW
-from player import Player, Enemy, BossEnemy
+from characters import Player, Enemy, BossEnemy
 from items import Healthpack
 class Level:
     def __init__(self, levelLayout, scrn):

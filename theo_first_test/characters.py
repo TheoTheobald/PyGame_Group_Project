@@ -200,7 +200,7 @@ class BossEnemy(Character):
             img = pygame.image.load(f"images/boss/{i}.png")
             img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
 
-            self.animations += img
+            self.animations += [img]
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft = pos)
     
