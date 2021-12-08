@@ -137,9 +137,15 @@ class Level:
         if self.player.sprite.dead:
             self.playerDead = True
     
+    def draw_bg(self):
+        game_bg = pygame.image.load('images/background/level_bg.jpeg').convert_alpha()
+        game_bg = pygame.transform.scale(game_bg, (1617, 768))
+        self.display.blit(game_bg, (0, 0))
+    
     def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
         
         # Level stuff
+        self.draw_bg()
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
