@@ -7,7 +7,7 @@ Level creator
 @author: theot
 """
 import pygame, sys
-from tiles import Tile
+from tiles import *
 from settings import tileSize, scrnW
 from player import Player, Enemy
 from items import Healthpack
@@ -34,7 +34,10 @@ class Level:
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
                 if cell == 'X':
-                    tile = Tile((x, y), tileSize)
+                    tile = Tile((x, y), tileSize, cell)
+                    self.tiles.add(tile)
+                elif cell >= '0' and cell <= '9':
+                    tile = Tile((x, y), tileSize, int(cell))
                     self.tiles.add(tile)
                 elif cell == 'P':
                     player = Player(((x + tileSize/4), y + 9))
