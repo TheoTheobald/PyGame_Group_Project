@@ -9,19 +9,15 @@ Level creator
 import pygame, sys
 from tiles import Tile
 from settings import tileSize, scrnW
-from player import Player, Enemy
+from player import Player, Enemy, BossEnemy
 from items import Healthpack
-from bossenemy import BossEnemy
-
 class Level:
     def __init__(self, levelLayout, scrn):
         self.display = scrn
         self.placeTiles(levelLayout)
         self.bullets = pygame.sprite.Group()
         self.playerDead = False
-        
         self.scrollSpeed = 0
-        
         
     def placeTiles(self, layout):
         self.tiles = pygame.sprite.Group()
@@ -138,7 +134,7 @@ class Level:
         if self.player.sprite.dead:
             self.playerDead = True
     
-    def run(self):
+    def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
         
         # Level stuff
         self.tiles.update(self.scrollSpeed)
