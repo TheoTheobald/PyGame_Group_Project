@@ -8,12 +8,15 @@ Implement tile object
 """
 
 import pygame
+from settings import tileSize
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos, size):
-        super().__init__()
-        self.image = pygame.image.load("images/level/level.png")
+    def __init__(self, pos, size, tType):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load(f"images/tile/{tType}.png")
+        self.image = pygame.transform.scale(img, (tileSize, tileSize))
         self.rect = self.image.get_rect(topleft = pos)
         
     def update(self, xShift):
         self.rect.x += xShift
+        

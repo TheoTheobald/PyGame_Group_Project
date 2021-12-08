@@ -6,14 +6,12 @@ Level creator
 
 @author: theot
 """
-import pygame
-from tiles import Tile
-from settings import tileSize, scrnW
-from player import Player
-from enemy import Enemy
-from items import Healthpack
-from bossenemy import BossEnemy
 
+import pygame, sys
+from tiles import *
+from settings import tileSize, scrnW
+from player import Player, Enemy, BossEnemy
+from items import Healthpack
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -25,6 +23,7 @@ class Level:
         self.placeTiles(levelLayout)
         self.bullets = pygame.sprite.Group()
 
+
         self.scrollSpeed = 0
 
     def placeTiles(self, layout):
@@ -33,9 +32,13 @@ class Level:
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
                 if cell == 'X':
-                    tile = Tile((x, y), tileSize)
+                    tile = Tile((x, y), tileSize, cell)
+                    self.tiles.add(tile)
+                elif cell >= '0' and cell <= '9':
+                    tile = Tile((x, y), tileSize, int(cell))
                     self.tiles.add(tile)
                 elif cell == 'P':
+
                     player = Player(((x + tileSize / 4), y))
                     self.player.add(player)
                 elif cell == 'E':
@@ -43,9 +46,10 @@ class Level:
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Healthpack(((x + tileSize / 5), y + 20))
+
                     self.items.add(healthpack)
                 elif cell == 'B':
-                    boss = BossEnemy((x, y))
+                    boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
 
     def scroll(self):
@@ -133,7 +137,9 @@ class Level:
                 else:
                     enemy.shooting = False
 
+
     def run(self):
+
 
         # Level stuff
         self.tiles.update(self.scrollSpeed)
@@ -146,6 +152,7 @@ class Level:
         self.items.update(self.scrollSpeed)
 
         # Player stuff
+
         self.player.update(self.scrollSpeed)
         self.collisionX()
         self.collisionY()
