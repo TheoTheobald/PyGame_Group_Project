@@ -17,7 +17,9 @@ pygame.init()
 scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
-#bg = pygame.image.load('button1.png')
+bg = pygame.image.load('images/background/main_bg.jpg')
+
+
 
 
 pygame.display.set_caption('Grandads Treasure')
@@ -36,7 +38,8 @@ def menu():
         surface = pygame.Surface((scrnW,scrnH))
         #fill screen (colour)
         surface.fill('black')
-       # scrn.blit(bg, (0,0))
+        background = pygame.transform.scale(bg, (int(bg.get_width() * 3.25), int(bg.get_height() * 3.25)))
+        surface.blit(background, (0,0))
         #main title
         main_font = pygame.font.SysFont("Lucida Calligraphy", 60)
         text_surface = main_font.render('GRANDADS TREASURE', True, 'white')
@@ -51,9 +54,9 @@ def menu():
 
 
         #load images
-        instruct = pygame.image.load('button1.png')
-        start = pygame.image.load('button2.png')
-        end = pygame.image.load('button3.png')
+        instruct = pygame.image.load('images/buttons/button1.png')
+        start = pygame.image.load('images/buttons/button2.png')
+        end = pygame.image.load('images/buttons/button3.png')
         #makes drawing faster
         instruct.convert()
         start.convert()
@@ -110,7 +113,7 @@ def instructions():
     while running:
         mo_x, mo_y = pygame.mouse.get_pos()
         scrn.fill(('white'))
-        back = pygame.image.load('button4.png')
+        back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()

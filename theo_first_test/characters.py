@@ -2,7 +2,7 @@
 """
 Created on Thu Dec  2 14:49:51 2021
 
-Player for the game
+All characters for the game
 
 @author: theot
 """
@@ -19,6 +19,7 @@ class Character(pygame.sprite.Sprite):
         self.falling = False
         self.facing = 0
         self.frameIndex = 0
+        self.animationTimeGap = 100
         self.updateTime = pygame.time.get_ticks()
         self.stance = 0
         self.className = 'character'
@@ -176,3 +177,40 @@ class Enemy(Character):
     def update(self, xShift):
         Character.update(self)
         self.rect.x += xShift
+
+class BossEnemy(Character):
+    def __init__(self, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.className = 'boss'
+        self.getSprites(pos)
+        
+        self.totalHealth = 2000
+        self.health = 2000
+        self.attackCooldown = 500
+        
+    def update(self, xShift):
+        Character.update(self)
+        self.rect.x += xShift
+        
+    def getSprites(self, pos):
+        self.animations = []
+        frames = len(os.listdir("images/boss"))
+
+        for i in range(frames):
+            img = pygame.image.load(f"images/boss/{i}.png")
+            img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
+
+            self.animations += img
+        self.image = self.animations[self.facing][self.stance][self.frameIndex]
+        self.rect = self.image.get_rect(topleft = pos)
+    
+    def animatePlayer(self):
+        timeGap = 200 # Time waited before resetting image
+        self.image = self.animations[self.facing][self.stance][self.frameIndex] # Update image to match current stance and frame
+        if pygame.time.get_ticks() - self.updateTime > timeGap: # If time since last update has reached timeGap
+            self.updateTime = pygame.time.get_ticks() # Update time since last update
+            self.frameIndex += 1                       # Move frame forward 1
+        if self.frameIndex >= len(self.animations[self.facing][self.stance]):
+            if self.stance == 3:
+                self.kill()
+            self.frameIndex = 0
