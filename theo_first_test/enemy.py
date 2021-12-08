@@ -9,9 +9,10 @@ class Enemy(Character):
         super().__init__(pos)
         self.totalHealth = 60
         self.health = 60
+        self.hasSpace = self.checkHasSpace()
         self.getSprites(pos)
 
-    def hasSpace(self):
+    def checkHasSpace(self):
         """This method checks if the enemy has space to move"""
         for platformIndex, levelPlatform in enumerate(levelLayout):
             for levelElementIndex, stageElement in enumerate(levelPlatform):
@@ -24,9 +25,11 @@ class Enemy(Character):
         return False
 
     def idleMove(self):
-        if self.hasSpace():
-            self.rect.x += 1
+        if self.hasSpace:
+            pass
 
     def update(self, xShift):
         super().update(xShift)
+        if self.checkHasSpace():
+            self.hasSpace = True
         self.idleMove()
