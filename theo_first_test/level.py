@@ -36,8 +36,8 @@ class Level:
                 if cell == 'X':
                     tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
-                elif cell >= '0' and cell <= '9':
-                    tile = Tile((x, y), tileSize, int(cell))
+                elif cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
+                    tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
                 elif cell == 'P':
                     player = Player(((x + tileSize/4), y + 9))
