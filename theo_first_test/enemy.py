@@ -25,8 +25,9 @@ class Enemy(Character):
         return False
 
     def idleMove(self):
-        if self.hasSpace:
-            self.rect.x +=1
+        pass
+        # if self.hasSpace():
+        #     self.rect.x +=1
 
     def update(self, xShift):
         super().update(xShift)
