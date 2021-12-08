@@ -122,8 +122,8 @@ class Player(Character):
         # Player combat
         self.bulletCooldown = 200
         self.bulletColour = GREEN
-        self.totalHealth = 500
-        self.health = 500
+        self.totalHealth = 50
+        self.health = 50
 
         # Player appearance
         self.getSprites(pos)
