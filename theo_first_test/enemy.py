@@ -17,7 +17,7 @@ class Enemy(Character):
         for platformIndex, levelPlatform in enumerate(levelLayout):
             for levelElementIndex, stageElement in enumerate(levelPlatform):
                 if stageElement == "E" and self.rect.topleft == (
-                        (levelElementIndex * tileSize), platformIndex * tileSize):
+                        (levelElementIndex * tileSize), (platformIndex * tileSize)+10):
                     # check that the enemy has enough platform to move (at least three tiles beneath enemy)
                     if "_" not in levelLayout[platformIndex + 1][levelElementIndex - 1:levelElementIndex + 2]:
                         return True
@@ -26,7 +26,7 @@ class Enemy(Character):
 
     def idleMove(self):
         if self.hasSpace:
-            pass
+            self.rect.x +=1
 
     def update(self, xShift):
         super().update(xShift)

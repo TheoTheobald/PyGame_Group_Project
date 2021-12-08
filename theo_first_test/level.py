@@ -40,11 +40,10 @@ class Level:
                     tile = Tile((x, y), tileSize, int(cell))
                     self.tiles.add(tile)
                 elif cell == 'P':
-
                     player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy((x, y))
+                    enemy = Enemy((x, y+10))
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Healthpack(((x + tileSize/5), y + 29))
@@ -97,7 +96,16 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
-
+            # for enemy in self.enemies.sprites():
+            #     enemy.fall()
+            #     if tile.rect.colliderect(enemy.rect):
+            #         if enemy.direction.y > 0:
+            #             enemy.rect.bottom = tile.rect.top
+            #             enemy.direction.y = 0       
+            #         elif enemy.direction.y < 0:
+            #             enemy.rect.top = tile.rect.bottom
+            #             enemy.direction.y = 0
+                            
     def bulletHitsCharacter(self):
         player = self.player.sprite
 

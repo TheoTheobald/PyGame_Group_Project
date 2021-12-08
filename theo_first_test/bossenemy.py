@@ -26,8 +26,6 @@ class BossEnemy(Character):
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 500
-        self.dead = False
-        self.bulletColour = RED
 
     def getSprites(self, pos):
         frames = len(os.listdir("images/boss"))
@@ -49,8 +47,8 @@ class BossEnemy(Character):
             self.frameIndex = 0
 
     def healthBar(self, scrn):
-        pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 43, 5))
-        pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (43 * (self.health/self.totalHealth)), 5))
+        pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 120, 5))
+        pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health/self.totalHealth)), 5))
             
     def update(self, xShift):
-        self.rect.x += xShift
+        super.update(xShift)
