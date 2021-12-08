@@ -19,7 +19,7 @@ class Enemy(Character):
                 if stageElement == "E" and self.rect.topleft == (
                         (levelElementIndex * tileSize), platformIndex * tileSize):
                     # check that the enemy has enough platform to move (at least three tiles beneath enemy)
-                    if levelLayout[platformIndex + 1][levelElementIndex - 1:levelElementIndex + 2] == "XXX":
+                    if "_" not in levelLayout[platformIndex + 1][levelElementIndex - 1:levelElementIndex + 2]:
                         return True
 
         return False

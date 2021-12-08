@@ -10,7 +10,9 @@ Level creator
 import pygame, sys
 from tiles import *
 from settings import tileSize, scrnW
-from player import Player, Enemy, BossEnemy
+from player import Player
+from enemy import Enemy
+from bossenemy import BossEnemy
 from items import Healthpack
 
 class Level:
@@ -22,9 +24,9 @@ class Level:
         self.display = scrn
         self.placeTiles(levelLayout)
         self.bullets = pygame.sprite.Group()
-
-
+        self.playerDead = False
         self.scrollSpeed = 0
+
 
     def placeTiles(self, layout):
         for rowIndex, row in enumerate(layout):
@@ -39,13 +41,13 @@ class Level:
                     self.tiles.add(tile)
                 elif cell == 'P':
 
-                    player = Player(((x + tileSize / 4), y))
+                    player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
                     enemy = Enemy((x, y))
                     self.enemies.add(enemy)
                 elif cell == 'H':
-                    healthpack = Healthpack(((x + tileSize / 5), y + 20))
+                    healthpack = Healthpack(((x + tileSize/5), y + 29))
 
                     self.items.add(healthpack)
                 elif cell == 'B':
@@ -138,8 +140,11 @@ class Level:
                     enemy.shooting = False
 
 
-    def run(self):
+    def checkDead(self):
+        if self.player.sprite.dead:
+            self.playerDead = True
 
+    def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
 
         # Level stuff
         self.tiles.update(self.scrollSpeed)
@@ -152,12 +157,13 @@ class Level:
         self.items.update(self.scrollSpeed)
 
         # Player stuff
-
-        self.player.update(self.scrollSpeed)
-        self.collisionX()
-        self.collisionY()
-        self.player.draw(self.display)
-        self.player.sprite.healthBar(self.display)
+        if not self.playerDead:
+            self.player.update(self.scrollSpeed)
+            self.collisionX()
+            self.collisionY()
+            self.player.draw(self.display)
+            self.player.sprite.healthBar(self.display)
+            self.checkDead()
 
         # Enemy update
         self.enemies.draw(self.display)
