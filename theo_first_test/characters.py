@@ -2,7 +2,7 @@
 """
 Created on Thu Dec  2 14:49:51 2021
 
-Player for the game
+All characters for the game
 
 @author: theot
 """
