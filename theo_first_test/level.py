@@ -12,6 +12,7 @@ from tiles import *
 from settings import tileSize, scrnW, PURPLE
 from player import Player
 from enemy import Enemy
+from bigEnemy import BigEnemy
 from bossenemy import BossEnemy
 from items import Item
 
@@ -34,10 +35,7 @@ class Level:
             for colIndex, cell in enumerate(row):
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
-                if cell == 'X':
-                    tile = Tile((x, y), tileSize, cell)
-                    self.tiles.add(tile)
-                elif cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
+                if cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
                     tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
                 elif cell == 'P':
@@ -58,6 +56,9 @@ class Level:
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
+                elif cell == 'S':
+                    bigEnemy = BigEnemy((x - 60, y - 120))
+                    self.enemies.add(bigEnemy)
 
     def scroll(self):
         player = self.player.sprite
