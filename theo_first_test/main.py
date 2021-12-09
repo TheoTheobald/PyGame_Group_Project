@@ -16,8 +16,6 @@ level = Level(levelLayout, scrn)
 bg = pygame.image.load('images/background/main_bg.jpg')
 
 
-
-
 pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
 def intro_music():

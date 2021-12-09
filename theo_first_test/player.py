@@ -17,6 +17,7 @@ class Player(Character):
 
     def __init__(self, pos):
         super().__init__(pos)
+        self.canTeleport = False
 
         # Player combat
         self.bulletCooldown = 200
