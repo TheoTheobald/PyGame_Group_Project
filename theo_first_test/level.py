@@ -9,11 +9,7 @@ Level creator
 
 import pygame, sys
 from tiles import *
-<<<<<<< Updated upstream
-from settings import tileSize, scrnW, PURPLE, levelLength
-=======
-from settings import tileSize, scrnW, PURPLE, LAVA
->>>>>>> Stashed changes
+from settings import tileSize, scrnW, PURPLE, LAVA, levelLength
 from player import Player
 from enemy import Enemy
 from bossenemy import BossEnemy
@@ -62,12 +58,9 @@ class Level:
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
-<<<<<<< Updated upstream
-=======
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))
                     self.enemies.add(bigEnemy)
->>>>>>> Stashed changes
 
     def scroll(self):
         player = self.player.sprite
@@ -190,23 +183,23 @@ class Level:
 
     def drawBG(self):
         self.display.fill('black')
-        self.scrollBG -= self.scrollSpeed # Background will scroll in an opposite direction of player movement
-        bg1 = pygame.image.load('images/background/1.png')
-        bg1 = pygame.transform.scale(bg1, (scrnW * 1.5, 768))
-        bg2 = pygame.image.load('images/background/2.png')
-        bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
-        bg3 = pygame.image.load('images/background/3.png')
-        bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
-        bg4 = pygame.image.load('images/background/4.png')
-        bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
-        bg5 = pygame.image.load('images/background/5.png')
-        bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
-        for x in range (5):
-            self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
-            self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
-            self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
-            self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
-            self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
+        # self.scrollBG -= self.scrollSpeed # Background will scroll in an opposite direction of player movement
+        # bg1 = pygame.image.load('images/background/1.png')
+        # bg1 = pygame.transform.scale(bg1, (scrnW * 1.5, 768))
+        # bg2 = pygame.image.load('images/background/2.png')
+        # bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
+        # bg3 = pygame.image.load('images/background/3.png')
+        # bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
+        # bg4 = pygame.image.load('images/background/4.png')
+        # bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
+        # bg5 = pygame.image.load('images/background/5.png')
+        # bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
+        # for x in range (5):
+        #     self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
+        #     self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
+        #     self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
+        #     self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
+        #     self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
     
     
         
