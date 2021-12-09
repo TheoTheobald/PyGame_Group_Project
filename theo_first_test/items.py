@@ -10,17 +10,13 @@ Items
 import pygame
 
 class Item(pygame.sprite.Sprite):
-    def __init__(self, pos):
-        pass
-
-class Healthpack(pygame.sprite.Sprite):
-    def __init__(self, pos):
-        pygame.sprite.Sprite.__init__(self)
-        self.className = 'healthpack'
+    def __init__(self, pos, itemType):
+        super().__init__()
         self.pos = pos
-        self.image = pygame.image.load("images/items/healthpack.png")
+        self.type = itemType
+        self.image = pygame.image.load(f"images/items/{self.type}.png")
         self.rect = self.image.get_rect(topleft = self.pos)
-        self.healthRestored = 150
-        
+    
     def update(self, xShift):
         self.rect.x += xShift
+        

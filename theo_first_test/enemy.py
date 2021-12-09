@@ -1,3 +1,12 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec  7 11:56:09 2021
+
+Enemy
+
+@author: theot
+"""
+
 from settings import *
 from character import Character
 

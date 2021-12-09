@@ -21,7 +21,7 @@ class Character(pygame.sprite.Sprite):
         self.canShoot = True
         self.shooting = False
         self.timeLastShot = pygame.time.get_ticks()
-        self.bulletCooldown = 1000
+        self.bulletCooldown = 800
         self.bulletColour = RED
         self.dead = False
 

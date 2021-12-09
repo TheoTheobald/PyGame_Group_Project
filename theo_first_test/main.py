@@ -27,7 +27,7 @@ def intro_music():
 
 
 def menu():
-    intro_music()
+    # intro_music()
     while True:
 
         #size of the screen
@@ -136,7 +136,7 @@ def music():
 
 def game():
     global level
-    music()
+    # music()
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

@@ -8,7 +8,7 @@ Boss Enemy
 """
 import pygame, os
 from settings import *
-from  player import Character
+from character import Character
 
 
 class BossEnemy(Character):
@@ -31,7 +31,7 @@ class BossEnemy(Character):
         frames = len(os.listdir("images/boss"))
         for i in range(frames):
             img = pygame.image.load(f"images/boss/{i}.png")
-            img = pygame.transform.scale(img, (int(img.get_width() * 1.5), int(img.get_height() * 1.5)))
+            img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
             self.animations += [img]
 
         self.image = self.animations[self.frameIndex]
@@ -51,4 +51,5 @@ class BossEnemy(Character):
         pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health/self.totalHealth)), 5))
             
     def update(self, xShift):
-        super.update(xShift)
+        self.rect.x += xShift
+        self.animate()

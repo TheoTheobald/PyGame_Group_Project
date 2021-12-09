@@ -9,11 +9,11 @@ Level creator
 
 import pygame, sys
 from tiles import *
-from settings import tileSize, scrnW
+from settings import tileSize, scrnW, PURPLE
 from player import Player
 from enemy import Enemy
 from bossenemy import BossEnemy
-from items import Healthpack
+from items import Item
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -37,8 +37,8 @@ class Level:
                 if cell == 'X':
                     tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
-                elif cell >= '0' and cell <= '9':
-                    tile = Tile((x, y), tileSize, int(cell))
+                elif cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
+                    tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
                 elif cell == 'P':
                     player = Player(((x + tileSize/4), y + 9))
@@ -47,9 +47,14 @@ class Level:
                     enemy = Enemy((x, y+10))
                     self.enemies.add(enemy)
                 elif cell == 'H':
-                    healthpack = Healthpack(((x + tileSize/5), y + 29))
-
+                    healthpack = Item(((x + tileSize/5), y + 29), 'healthpack')
                     self.items.add(healthpack)
+                elif cell == 'J':
+                    jumpBoost = Item(((x + tileSize/5), y + 29), 'jumpBoost')
+                    self.items.add(jumpBoost)
+                elif cell == 'D':
+                    dmgBoost = Item(((x + tileSize/5), y + 29), 'dmgBoost')
+                    self.items.add(dmgBoost)
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
@@ -77,8 +82,10 @@ class Level:
             if tile.rect.colliderect(player.rect):
                 if player.direction.x < 0:
                     player.rect.left = tile.rect.right
+                    player.direction.x = 0
                 elif player.direction.x > 0:
                     player.rect.right = tile.rect.left
+                    player.direction.x = 0
 
             for bullet in self.bullets.sprites():
                 if tile.rect.colliderect(bullet.rect):
@@ -116,17 +123,30 @@ class Level:
                 player.health -= 10
             for enemy in self.enemies.sprites():
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
-                    bullet.kill()
                     enemy.health -= 10
+                    if bullet.colour == PURPLE:
+                        enemy.health -= 10
+                    bullet.kill()
 
     def pickupItem(self):
         player = self.player.sprite
 
         for item in self.items.sprites():
             if item.rect.colliderect(player.rect):
-                if item.className == 'healthpack':
-                    player.health += item.healthRestored
+                if item.type == 'healthpack':
+                    if player.health == player.totalHealth:
+                        return
+                    player.health += 150
+                    if player.health > player.totalHealth:
+                        player.health = player.totalHealth
                     item.kill()
+                if item.type == 'jumpBoost':
+                    player.jumpSpeed -= 6
+                    item.kill()
+                if item.type == 'dmgBoost':
+                    player.bulletColour = PURPLE
+                    item.kill()
+                        
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -142,7 +162,7 @@ class Level:
 
                 if enemy.canShoot:  # Shooting range, height and cooldown
                     if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
-                        if player.rect.x > enemy.rect.x - 300 and player.rect.x < enemy.rect.x + 300:
+                        if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
                             enemy.shooting = True
                             enemy.timeLastShot = pygame.time.get_ticks()
                 else:
@@ -150,8 +170,12 @@ class Level:
 
 
     def checkDead(self):
+        gameOverFont = pygame.font.SysFont("PT Serif", 60)
+        gameOver = gameOverFont.render('YOU DIED - PRESS TO CONTINUE', True, 'red')
         if self.player.sprite.dead:
             self.playerDead = True
+        if self.playerDead:
+            self.display.blit(gameOver, (200, 300))
 
     def drawBG(self):
         self.display.fill('black')
