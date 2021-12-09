@@ -32,7 +32,7 @@ def menu():
         surface = pygame.Surface((scrnW,scrnH))
         #fill screen (colour)
         surface.fill('black')
-        background = pygame.transform.scale(bg, (int(bg.get_width() * 3.25), int(bg.get_height() * 3.25)))
+        background = pygame.transform.scale(bg, (1280, 832))
         surface.blit(background, (0,0))
         #main title
         main_font = pygame.font.SysFont("Lucida Calligraphy", 60)
