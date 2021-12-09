@@ -9,7 +9,11 @@ Level creator
 
 import pygame, sys
 from tiles import *
+<<<<<<< Updated upstream
 from settings import tileSize, scrnW, PURPLE, levelLength
+=======
+from settings import tileSize, scrnW, PURPLE, LAVA
+>>>>>>> Stashed changes
 from player import Player
 from enemy import Enemy
 from bossenemy import BossEnemy
@@ -58,6 +62,12 @@ class Level:
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
+<<<<<<< Updated upstream
+=======
+                elif cell == 'S':
+                    bigEnemy = BigEnemy((x - 40, y - 65))
+                    self.enemies.add(bigEnemy)
+>>>>>>> Stashed changes
 
     def scroll(self):
         player = self.player.sprite
@@ -110,26 +120,21 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
-            # for enemy in self.enemies.sprites():
-            #     enemy.fall()
-            #     if tile.rect.colliderect(enemy.rect):
-            #         if enemy.direction.y > 0:
-            #             enemy.rect.bottom = tile.rect.top
-            #             enemy.direction.y = 0       
-            #         elif enemy.direction.y < 0:
-            #             enemy.rect.top = tile.rect.bottom
-            #             enemy.direction.y = 0
                             
     def bulletHitsCharacter(self):
         player = self.player.sprite
 
         for bullet in self.bullets.sprites():
             if bullet.rect.colliderect(player.rect):
-                bullet.kill()
                 player.health -= 10
+                if bullet.colour == LAVA:
+                    player.health -= 10
+                bullet.kill()
             for enemy in self.enemies.sprites():
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
                     enemy.health -= 10
+                    if bullet.colour == LAVA:
+                        enemy.health -= 5
                     if bullet.colour == PURPLE:
                         enemy.health -= 10
                     bullet.kill()
@@ -161,13 +166,13 @@ class Level:
             if enemy.className == 'boss':
                 pass
             else:
-                if enemy.rect.x > player.rect.x and not enemy.dead:  # Facing left
+                if enemy.rect.x + (enemy.image.get_width()/2) > player.rect.x + (player.image.get_width()/2) and not enemy.dead:  # Facing left
                     enemy.facing = 1
-                if enemy.rect.x < player.rect.x and not enemy.dead:  # Facing right
+                if enemy.rect.x - (player.image.get_width()/2) < player.rect.x - (enemy.image.get_width()/2) and not enemy.dead:  # Facing right
                     enemy.facing = 0
 
                 if enemy.canShoot:  # Shooting range, height and cooldown
-                    if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
+                    if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
                             enemy.shooting = True
                             enemy.timeLastShot = pygame.time.get_ticks()
@@ -238,7 +243,7 @@ class Level:
 
         # Bullet stuff
         self.bullets.draw(self.display)
-        self.bullets.update()
+        self.bullets.update(self.scrollSpeed)
         self.bulletHitsCharacter()
 
         for player in self.player:

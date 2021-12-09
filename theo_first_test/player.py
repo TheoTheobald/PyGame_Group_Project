@@ -21,8 +21,13 @@ class Player(Character):
         # Player combat
         self.bulletCooldown = 200
         self.bulletColour = GREEN
+<<<<<<< Updated upstream
         self.totalHealth = 99
         self.health = 999
+=======
+        self.totalHealth = 250
+        self.health = 250
+>>>>>>> Stashed changes
 
         # Player appearance
 

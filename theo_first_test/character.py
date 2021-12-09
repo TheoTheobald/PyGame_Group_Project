@@ -23,6 +23,11 @@ class Character(pygame.sprite.Sprite):
         self.timeLastShot = pygame.time.get_ticks()
         self.bulletCooldown = 800
         self.bulletColour = RED
+        self.bulletThickness = 5
+        self.bulletSpeed = 14
+        self.bulletOffsetXPlus = 50
+        self.bulletOffsetXMinus = -10
+        self.bulletOffsetY = 25
         self.dead = False
 
         # Char movement
@@ -65,13 +70,13 @@ class Character(pygame.sprite.Sprite):
     def shoot(self):
         if self.facing == 0:
             Dir = 1
-            xPos = self.rect.x + 50
-            yPos = self.rect.y + 25
+            xPos = self.rect.x + self.bulletOffsetXPlus
+            yPos = self.rect.y + self.bulletOffsetY
         elif self.facing == 1:
             Dir = -1
-            xPos = self.rect.x - 10
-            yPos = self.rect.y + 25
-        return Projectile(xPos, yPos, 5, self.bulletColour, Dir)
+            xPos = self.rect.x + self.bulletOffsetXMinus
+            yPos = self.rect.y + self.bulletOffsetY
+        return Projectile(xPos, yPos, self.bulletThickness, self.bulletColour, Dir, self.bulletSpeed)
 
     def shootRate(self):
         if self.timeLastShot + self.bulletCooldown < pygame.time.get_ticks() and not self.dead:

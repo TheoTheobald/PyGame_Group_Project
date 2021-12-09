@@ -12,16 +12,18 @@ from character import Character
 
 
 class BossEnemy(Character):
+    className = 'boss'
+    
     def __init__(self, pos):
         super().__init__(pos)
         self.animations = []
         self.pos = pos
         self.frameIndex = 0
+        self.facing = 0
         self.updateTime = pygame.time.get_ticks()
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
         self.rect = self.image.get_rect(topleft=pos)
-        self.className = 'boss'
 
         self.totalHealth = 2000
         self.health = 2000
