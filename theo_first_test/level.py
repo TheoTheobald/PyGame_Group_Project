@@ -9,7 +9,7 @@ Level creator
 
 import pygame, sys
 from tiles import *
-from settings import tileSize, scrnW, PURPLE, levelLength
+from settings import tileSize, scrnW, PURPLE, LAVA, levelLength
 from player import Player
 from enemy import Enemy
 from bossenemy import BossEnemy
@@ -58,6 +58,9 @@ class Level:
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
+                elif cell == 'S':
+                    bigEnemy = BigEnemy((x - 40, y - 65))
+                    self.enemies.add(bigEnemy)
 
     def scroll(self):
         player = self.player.sprite
@@ -110,26 +113,21 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
-            # for enemy in self.enemies.sprites():
-            #     enemy.fall()
-            #     if tile.rect.colliderect(enemy.rect):
-            #         if enemy.direction.y > 0:
-            #             enemy.rect.bottom = tile.rect.top
-            #             enemy.direction.y = 0       
-            #         elif enemy.direction.y < 0:
-            #             enemy.rect.top = tile.rect.bottom
-            #             enemy.direction.y = 0
                             
     def bulletHitsCharacter(self):
         player = self.player.sprite
 
         for bullet in self.bullets.sprites():
             if bullet.rect.colliderect(player.rect):
-                bullet.kill()
                 player.health -= 10
+                if bullet.colour == LAVA:
+                    player.health -= 10
+                bullet.kill()
             for enemy in self.enemies.sprites():
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
                     enemy.health -= 10
+                    if bullet.colour == LAVA:
+                        enemy.health -= 5
                     if bullet.colour == PURPLE:
                         enemy.health -= 10
                     bullet.kill()
@@ -161,13 +159,13 @@ class Level:
             if enemy.className == 'boss':
                 pass
             else:
-                if enemy.rect.x > player.rect.x and not enemy.dead:  # Facing left
+                if enemy.rect.x + (enemy.image.get_width()/2) > player.rect.x + (player.image.get_width()/2) and not enemy.dead:  # Facing left
                     enemy.facing = 1
-                if enemy.rect.x < player.rect.x and not enemy.dead:  # Facing right
+                if enemy.rect.x - (player.image.get_width()/2) < player.rect.x - (enemy.image.get_width()/2) and not enemy.dead:  # Facing right
                     enemy.facing = 0
 
                 if enemy.canShoot:  # Shooting range, height and cooldown
-                    if player.rect.y > enemy.rect.y - 50 and player.rect.y < enemy.rect.y + 50:
+                    if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
                             enemy.shooting = True
                             enemy.timeLastShot = pygame.time.get_ticks()
@@ -185,23 +183,23 @@ class Level:
 
     def drawBG(self):
         self.display.fill('black')
-        self.scrollBG -= self.scrollSpeed # Background will scroll in an opposite direction of player movement
-        bg1 = pygame.image.load('images/background/1.png')
-        bg1 = pygame.transform.scale(bg1, (scrnW * 1.5, 768))
-        bg2 = pygame.image.load('images/background/2.png')
-        bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
-        bg3 = pygame.image.load('images/background/3.png')
-        bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
-        bg4 = pygame.image.load('images/background/4.png')
-        bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
-        bg5 = pygame.image.load('images/background/5.png')
-        bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
-        for x in range (5):
-            self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
-            self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
-            self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
-            self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
-            self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
+        # self.scrollBG -= self.scrollSpeed # Background will scroll in an opposite direction of player movement
+        # bg1 = pygame.image.load('images/background/1.png')
+        # bg1 = pygame.transform.scale(bg1, (scrnW * 1.5, 768))
+        # bg2 = pygame.image.load('images/background/2.png')
+        # bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
+        # bg3 = pygame.image.load('images/background/3.png')
+        # bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
+        # bg4 = pygame.image.load('images/background/4.png')
+        # bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
+        # bg5 = pygame.image.load('images/background/5.png')
+        # bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
+        # for x in range (5):
+        #     self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
+        #     self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
+        #     self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
+        #     self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
+        #     self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
     
     
         
@@ -238,7 +236,7 @@ class Level:
 
         # Bullet stuff
         self.bullets.draw(self.display)
-        self.bullets.update()
+        self.bullets.update(self.scrollSpeed)
         self.bulletHitsCharacter()
 
         for player in self.player:
