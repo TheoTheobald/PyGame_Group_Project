@@ -9,7 +9,7 @@ Level creator
 
 import pygame, sys
 from tiles import *
-from settings import tileSize, scrnW, PURPLE
+from settings import tileSize, scrnW, PURPLE, levelLength
 from player import Player
 from enemy import Enemy
 from bossenemy import BossEnemy
@@ -63,16 +63,20 @@ class Level:
         player = self.player.sprite
         xPos = player.rect.centerx
         xDir = player.direction.x
+        xPosLeft = player.rect.left
+        xPosRight = player.rect.right
 
-        if xPos < (scrnW / 4) and xDir < 0:
+        if (xPos < scrnW / 4 and self.scrollBG > abs(5)) and xDir < 0:
             self.scrollSpeed = 5
             player.speed = 0
-        elif xPos > ((3 * scrnW) / 4) and xDir > 0:
+        elif (xPos > (scrnW * 3 / 4) and self.scrollBG < (levelLength * tileSize) - scrnW) and xDir > 0:
             self.scrollSpeed = -5
             player.speed = 0
-        else:
-            self.scrollSpeed = 0
-            player.speed = 5
+        elif xPosLeft + self.scrollSpeed < 0:
+            player.speed = 0
+        # else:
+        #     self.scrollSpeed = 0
+        #     player.speed = 5
 
     def collisionX(self):
         player = self.player.sprite

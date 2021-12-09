@@ -37,6 +37,8 @@ class Player(Character):
                     
             if keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]:
                 self.facing = 0
+                if self.direction.x:
+                    self.rect.x += 1
                 self.direction.x = 1
                 self.stance = 1
                         
