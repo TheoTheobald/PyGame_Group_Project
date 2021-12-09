@@ -21,8 +21,8 @@ class Player(Character):
         # Player combat
         self.bulletCooldown = 200
         self.bulletColour = GREEN
-        self.totalHealth = 9999
-        self.health = 9999
+        self.totalHealth = 99
+        self.health = 9
 
         # Player appearance
 

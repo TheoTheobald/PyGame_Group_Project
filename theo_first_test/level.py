@@ -76,7 +76,8 @@ class Level:
 
     def collisionX(self):
         player = self.player.sprite
-        player.rect.x += player.direction.x * player.speed
+        if not self.playerDead:
+            player.rect.x += player.direction.x * player.speed
 
         for tile in self.tiles.sprites():
             if tile.rect.colliderect(player.rect):
@@ -215,12 +216,12 @@ class Level:
 
         # Player stuff
         if not self.playerDead:
+            self.checkDead()
             self.player.update(self.scrollSpeed)
             self.collisionX()
             self.collisionY()
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
-            self.checkDead()
 
         # Enemy update
         self.enemies.draw(self.display)
