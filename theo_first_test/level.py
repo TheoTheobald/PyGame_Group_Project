@@ -26,6 +26,7 @@ class Level:
         self.bullets = pygame.sprite.Group()
         self.playerDead = False
         self.scrollSpeed = 0
+        self.scrollBG = 0
 
 
     def placeTiles(self, layout):
@@ -153,9 +154,14 @@ class Level:
             self.playerDead = True
 
     def drawBG(self):
+        self.display.fill('black')
+        self.scrollBG -= self.scrollSpeed # Background will scroll in an opposite direction of player movement
         game_bg = pygame.image.load('images/background/level_bg.png').convert_alpha()
         game_bg = pygame.transform.scale(game_bg, (1200, 768))
-        self.display.blit(game_bg, (0, 0))
+        for x in range (5):
+            self.display.blit(game_bg, ((x * game_bg.get_width() - 100) - self.scrollBG * 0.5, 0))
+    
+    
         
         
     def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
