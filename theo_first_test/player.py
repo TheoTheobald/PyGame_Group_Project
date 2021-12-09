@@ -22,7 +22,7 @@ class Player(Character):
         self.bulletCooldown = 200
         self.bulletColour = GREEN
         self.totalHealth = 99
-        self.health = 999
+        self.health = 99
 
         # Player appearance
 
