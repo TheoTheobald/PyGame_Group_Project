@@ -12,7 +12,6 @@ from tiles import *
 from settings import tileSize, scrnW, PURPLE, levelLength
 from player import Player
 from enemy import Enemy
-from bigEnemy import BigEnemy
 from bossenemy import BossEnemy
 from items import Item
 
@@ -35,7 +34,10 @@ class Level:
             for colIndex, cell in enumerate(row):
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
-                if cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
+                if cell == 'X':
+                    tile = Tile((x, y), tileSize, cell)
+                    self.tiles.add(tile)
+                elif cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
                     tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
                 elif cell == 'P':
@@ -56,9 +58,6 @@ class Level:
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
-                elif cell == 'S':
-                    bigEnemy = BigEnemy((x - 60, y - 120))
-                    self.enemies.add(bigEnemy)
 
     def scroll(self):
         player = self.player.sprite
@@ -73,16 +72,17 @@ class Level:
         elif (xPos > (scrnW * 3 / 4) and self.scrollBG < (levelLength * tileSize) - scrnW) and xDir > 0:
             self.scrollSpeed = -5
             player.speed = 0
-        elif xPosLeft + self.scrollSpeed < 0:
+        elif (xPosLeft + self.scrollSpeed < 0) and xDir < 0:
             player.speed = 0
-        # else:
-        #     self.scrollSpeed = 0
-        #     player.speed = 5
+        elif (xPosRight + self.scrollSpeed > scrnW) and xDir > 0:
+            player.speed = 0
+        else:
+            self.scrollSpeed = 0
+            player.speed = 5
 
     def collisionX(self):
         player = self.player.sprite
-        if not self.playerDead:
-            player.rect.x += player.direction.x * player.speed
+        player.rect.x += player.direction.x * player.speed
 
         for tile in self.tiles.sprites():
             if tile.rect.colliderect(player.rect):
@@ -221,12 +221,12 @@ class Level:
 
         # Player stuff
         if not self.playerDead:
-            self.checkDead()
             self.player.update(self.scrollSpeed)
             self.collisionX()
             self.collisionY()
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
+            self.checkDead()
 
         # Enemy update
         self.enemies.draw(self.display)

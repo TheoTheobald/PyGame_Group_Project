@@ -22,7 +22,7 @@ class Player(Character):
         self.bulletCooldown = 200
         self.bulletColour = GREEN
         self.totalHealth = 99
-        self.health = 9
+        self.health = 999
 
         # Player appearance
 
@@ -37,8 +37,8 @@ class Player(Character):
                     
             if keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]:
                 self.facing = 0
-                if self.direction.x:
-                    self.rect.x += 1
+                # if self.direction.x:
+                #     self.rect.x += 1
                 self.direction.x = 1
                 self.stance = 1
                         
