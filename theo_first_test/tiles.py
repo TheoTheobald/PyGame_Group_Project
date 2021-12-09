@@ -12,7 +12,7 @@ from settings import tileSize
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, pos, size, tType):
-        super().__init__(self)
+        super().__init__()
         img = pygame.image.load(f"images/tile/{tType}.png")
         self.image = pygame.transform.scale(img, (tileSize, tileSize))
         self.rect = self.image.get_rect(topleft = pos)
