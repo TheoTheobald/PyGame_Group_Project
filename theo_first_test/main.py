@@ -133,7 +133,7 @@ def instructions():
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()
-        rect4.topleft = (5,30)
+        rect4.topleft = (5,60)
         scrn.blit(back, rect4)
 
         for event in pygame.event.get():
@@ -170,14 +170,6 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-             
-                
-                
-               
-                
-                
-                
-                
 
 
         scrn.fill('black')
