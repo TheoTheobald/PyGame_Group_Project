@@ -57,7 +57,7 @@ class Level:
                     dmgBoost = Item(((x + tileSize/5), y + 29), 'dmgBoost')
                     self.items.add(dmgBoost)
                 elif cell == 'B':
-                    boss = BossEnemy((x - 60, y - 120))
+                    boss = BossEnemy((x - 60, y-95))
                     self.enemies.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))

@@ -24,6 +24,8 @@ class BossEnemy(Character):
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
         self.rect = self.image.get_rect(topleft=pos)
+        self.mean=False
+        self.criteria=False
 
         self.totalHealth = 2000
         self.health = 2000
@@ -55,3 +57,17 @@ class BossEnemy(Character):
     def update(self, xShift):
         self.rect.x += xShift
         self.animate()
+        self.horitzonal_motion()
+
+    def horitzonal_motion(self):
+        if not (self.mean):
+            if self.rect.midbottom == (self.pos[0], self.pos[1]) and self.criteria:
+                return
+            self.rect.x -= 5
+            if self.rect.left < 0:
+                self.mean = True
+        else:
+            self.rect.x += 5
+            if self.rect.x > scrnW - 150:
+                self.mean = False
+                self.criteria = True
