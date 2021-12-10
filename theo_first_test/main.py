@@ -18,14 +18,15 @@ bg = pygame.image.load('images/background/level_bg.png')
 
 pygame.display.set_caption('Grandads Treasure')
 font = pygame.font.SysFont("Verdana", 20)
-def intro_music():
-   # add music from https://freemusicarchive.org/
-    pygame.mixer.music.load("music/bgm0.mp3")
-    pygame.mixer.music.play(loops=-1)
 
+def music(track):
+   # add music from https://freemusicarchive.org/
+    pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+    pygame.mixer.music.play(loops=-1)
+    
 
 def menu():
-    # intro_music()
+    music(0)
     while True:
 
         #size of the screen
@@ -127,14 +128,9 @@ def instructions():
         pygame.display.update()
         clock.tick(60)
 
-def music():
-   # add music from https://freemusicarchive.org/
-    pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-    pygame.mixer.music.play(loops=-1)
-
 def game():
     global level
-    # music()
+    music(1)
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:

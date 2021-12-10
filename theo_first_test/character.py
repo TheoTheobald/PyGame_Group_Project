@@ -60,7 +60,7 @@ class Character(pygame.sprite.Sprite):
         timeGap = 100  # Time waited before resetting image
         self.image = self.animations[self.facing][self.stance][self.frameIndex]  # Update image to match current stance and frame
         if pygame.time.get_ticks() - self.updateTime > timeGap:  # If time since last update has reached timeGap
-            if self.stance == 3 and self.frameIndex == len(self.animations[self.facing][self.stance]) - 1:
+            if self.stance == 3 and self.frameIndex == len(self.animations[self.facing][self.stance]) - 1 and self.className == 'player':
                 pass
             else:
                 self.updateTime = pygame.time.get_ticks()  # Update time since last update
