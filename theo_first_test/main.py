@@ -13,7 +13,7 @@ pygame.init()
 scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
-bg = pygame.image.load('images/background/main_bg.jpg')
+bg = pygame.image.load('images/background/level_bg.png')
 
 
 pygame.display.set_caption('Grandads Treasure')
@@ -32,13 +32,13 @@ def menu():
         surface = pygame.Surface((scrnW,scrnH))
         #fill screen (colour)
         surface.fill('black')
-        background = pygame.transform.scale(bg, (1280, 832))
+        background = pygame.transform.scale(bg, (int(bg.get_width() * 2), int(bg.get_height() * 2)))
         surface.blit(background, (0,0))
         #main title
-        main_font = pygame.font.SysFont("Lucida Calligraphy", 60)
-        text_surface = main_font.render('GRANDADS TREASURE', True, 'white')
-        scrn.blit(surface,(0,0))
-        scrn.blit(text_surface,(200,50))
+        main_font = pygame.font.SysFont("Calibri", 80)
+        text_surface = main_font.render('Grandads Treasure', True, 'white')
+        scrn.blit(surface,(0,00))
+        scrn.blit(text_surface,(200,100))
 
         mo_x, mo_y = pygame.mouse.get_pos()
 
