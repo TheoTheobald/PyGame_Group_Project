@@ -180,7 +180,8 @@ class Level:
         
         if self.player.sprite.dead:
             self.display.blit(gameOver, (200, 300))
-        # if self.playerDead:
+        # if self.player.sprite.cont == True:
+        #     self.playerDead = True
             
             
 

@@ -60,10 +60,13 @@ class Character(pygame.sprite.Sprite):
         timeGap = 100  # Time waited before resetting image
         self.image = self.animations[self.facing][self.stance][self.frameIndex]  # Update image to match current stance and frame
         if pygame.time.get_ticks() - self.updateTime > timeGap:  # If time since last update has reached timeGap
-            self.updateTime = pygame.time.get_ticks()  # Update time since last update
-            self.frameIndex += 1  # Move frame forward 1
+            if self.stance == 3 and self.frameIndex == len(self.animations[self.facing][self.stance]) - 1:
+                pass
+            else:
+                self.updateTime = pygame.time.get_ticks()  # Update time since last update
+                self.frameIndex += 1  # Move frame forward 1
         if self.frameIndex >= len(self.animations[self.facing][self.stance]):
-            if self.stance == 3 and self.className != "player":
+            if self.stance == 3 and self.className != 'player':
                 self.kill()
             self.frameIndex = 0
 
@@ -102,6 +105,8 @@ class Character(pygame.sprite.Sprite):
                 self.stance = 1
             else:
                 self.stance = 3
+        if self.dead == True:
+            self.direction.x = 0
 
     def healthBar(self, scrn):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 43, 5))
