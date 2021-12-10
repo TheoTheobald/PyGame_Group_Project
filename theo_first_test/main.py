@@ -144,9 +144,12 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if level.playerDead:
-                level = Level(levelLayout, scrn)
-                menu()
+            # if level.playerkDead:
+            #     level = Level(levelLayout, scrn)
+            #     menu()
+                
+                
+                
 
 
         scrn.fill('black')

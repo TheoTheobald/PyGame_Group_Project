@@ -70,10 +70,10 @@ class Level:
         xPosLeft = player.rect.left
         xPosRight = player.rect.right
 
-        if (xPos < scrnW / 4 and self.scrollBG > abs(5)) and xDir < 0:
+        if (xPos < scrnW / 3 and self.scrollBG > abs(5)) and xDir < 0:
             self.scrollSpeed = 5
             player.speed = 0
-        elif (xPos > (scrnW * 3 / 4) and self.scrollBG < (levelLength * tileSize) - scrnW) and xDir > 0:
+        elif (xPos > (scrnW * 2 / 3) and self.scrollBG < (levelLength * tileSize) - scrnW) and xDir > 0:
             self.scrollSpeed = -5
             player.speed = 0
         elif (xPosLeft + self.scrollSpeed < 0) and xDir < 0:
@@ -85,6 +85,7 @@ class Level:
             player.speed = 5
 
     def collisionX(self):
+        
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
 
@@ -164,8 +165,7 @@ class Level:
                     enemy.facing = 1
                 if enemy.rect.x - (player.image.get_width()/2) < player.rect.x - (enemy.image.get_width()/2) and not enemy.dead:  # Facing right
                     enemy.facing = 0
-
-                if enemy.canShoot:  # Shooting range, height and cooldown
+                if enemy.canShoot and not player.dead:  # Shooting range, height and cooldown
                     if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
                             enemy.shooting = True
@@ -176,11 +176,13 @@ class Level:
 
     def checkDead(self):
         gameOverFont = pygame.font.SysFont("PT Serif", 60)
-        gameOver = gameOverFont.render('YOU DIED - PRESS TO CONTINUE', True, 'red')
+        gameOver = gameOverFont.render('YOU DIED - PRESS TO CONTINUE', True, 'white')
+        
         if self.player.sprite.dead:
-            self.playerDead = True
-        if self.playerDead:
             self.display.blit(gameOver, (200, 300))
+        # if self.playerDead:
+            
+            
 
     def drawBG(self):
         self.display.fill('black')
@@ -191,15 +193,15 @@ class Level:
         bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
         bg3 = pygame.image.load('images/background/3.png')
         bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
-        bg4 = pygame.image.load('images/background/4.png')
-        bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
+        # bg4 = pygame.image.load('images/background/4.png')
+        # bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
         bg5 = pygame.image.load('images/background/5.png')
         bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
         for x in range (5):
             self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
             self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
             self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
-            self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
+            # self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
             self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
     
     

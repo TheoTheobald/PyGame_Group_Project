@@ -1,4 +1,4 @@
-import os
+import pygame, os
 from settings import *
 from projectile import Projectile
 
@@ -63,7 +63,7 @@ class Character(pygame.sprite.Sprite):
             self.updateTime = pygame.time.get_ticks()  # Update time since last update
             self.frameIndex += 1  # Move frame forward 1
         if self.frameIndex >= len(self.animations[self.facing][self.stance]):
-            if self.stance == 3:
+            if self.stance == 3 and self.className != "player":
                 self.kill()
             self.frameIndex = 0
 
