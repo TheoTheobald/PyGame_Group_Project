@@ -141,6 +141,9 @@ def game():
                 if event.key == pygame.K_ESCAPE:
                     pygame.mixer.music.stop()
                     menu()
+                if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
+                    level = Level(levelLayout, scrn)
+                    menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()

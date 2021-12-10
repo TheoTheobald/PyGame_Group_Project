@@ -176,12 +176,10 @@ class Level:
 
     def checkDead(self):
         gameOverFont = pygame.font.SysFont("PT Serif", 60)
-        gameOver = gameOverFont.render('YOU DIED - PRESS TO CONTINUE', True, 'white')
+        gameOver = gameOverFont.render('YOU DIED - PRESS ENTER TO CONTINUE', True, 'white')
         
         if self.player.sprite.dead:
             self.display.blit(gameOver, (200, 300))
-        # if self.player.sprite.cont == True:
-        #     self.playerDead = True
             
             
 
@@ -221,15 +219,6 @@ class Level:
         self.pickupItem()
         self.items.update(self.scrollSpeed)
 
-        # Player stuff
-        if not self.playerDead:
-            self.player.update(self.scrollSpeed)
-            self.collisionX()
-            self.collisionY()
-            self.player.draw(self.display)
-            self.player.sprite.healthBar(self.display)
-            self.checkDead()
-
         # Enemy update
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
@@ -249,3 +238,12 @@ class Level:
         for enemy in self.enemies:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
+
+        # Player stuff
+        if not self.playerDead:
+            self.player.update(self.scrollSpeed)
+            self.collisionX()
+            self.collisionY()
+            self.player.draw(self.display)
+            self.player.sprite.healthBar(self.display)
+            self.checkDead()
