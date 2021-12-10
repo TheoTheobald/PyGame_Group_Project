@@ -98,7 +98,10 @@ class Character(pygame.sprite.Sprite):
     def die(self):
         if self.health <= 0:
             self.dead = True
-            self.stance = 3
+            if self.className == 'bigEnemy':
+                self.stance = 1
+            else:
+                self.stance = 3
 
     def healthBar(self, scrn):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 43, 5))
