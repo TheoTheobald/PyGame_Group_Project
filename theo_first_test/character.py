@@ -34,7 +34,7 @@ class Character(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2(0, 0)
         self.speed = 5
         self.gravity = 1
-        self.jumpSpeed = -23
+        self.jumpSpeed = -18
 
     def getSprites(self, pos):
         rightLeft = ['right', 'left']
