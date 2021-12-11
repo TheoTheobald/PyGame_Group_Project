@@ -9,12 +9,12 @@ Level creator
 
 import pygame, sys
 from tiles import *
-from settings import tileSize, scrnW, PURPLE, LAVA, levelLength
+from settings import *
 from player import Player
 from enemy import Enemy
 from bigEnemy import BigEnemy
 from bossenemy import BossEnemy
-from items import Item
+from items import Item, Portal
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -28,6 +28,9 @@ class Level:
         self.playerDead = False
         self.scrollSpeed = 0
         self.scrollBG = 0
+        
+        self.redManDead = False
+        self.teleportPlayer = False
 
 
     def placeTiles(self, layout):
@@ -45,7 +48,7 @@ class Level:
                     player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy((x, y+10))
+                    enemy = Enemy((x, y + 10))
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Item(((x + tileSize/5), y + 29), 'healthpack')
@@ -56,6 +59,9 @@ class Level:
                 elif cell == 'D':
                     dmgBoost = Item(((x + tileSize/5), y + 29), 'dmgBoost')
                     self.items.add(dmgBoost)
+                elif cell == 'Q':
+                    portal = Portal((x, y), 'portal')
+                    self.items.add(portal)
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y-95))
                     self.enemies.add(boss)
@@ -118,7 +124,6 @@ class Level:
                             
     def bulletHitsCharacter(self):
         player = self.player.sprite
-
         for bullet in self.bullets.sprites():
             if bullet.rect.colliderect(player.rect):
                 player.health -= 10
@@ -126,6 +131,10 @@ class Level:
                     player.health -= 10
                 bullet.kill()
             for enemy in self.enemies.sprites():
+                
+                if enemy.dead and not enemy.scoreGiven:  #if bullet kills enemy
+                    player.score += enemy.value #increment score
+                    enemy.scoreGiven = True
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
                     enemy.health -= 10
                     if bullet.colour == LAVA:
@@ -133,6 +142,23 @@ class Level:
                     if bullet.colour == PURPLE:
                         enemy.health -= 10
                     bullet.kill()
+        #display score to screen   
+        font = pygame.font.Font(pygame.font.match_font('arial'), 30)
+        text_surface = font.render(str(player.score), True, 'white')
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (50,100)
+        self.display.blit(text_surface, text_rect)
+             
+    
+    def redMan(self):
+        redDead = True
+        for enemy in self.enemies:
+            if enemy.className == 'bigEnemy':
+                redDead = False
+            else:
+                pass
+        if redDead:
+            self.redManDead = True
 
     def pickupItem(self):
         player = self.player.sprite
@@ -152,7 +178,10 @@ class Level:
                 if item.type == 'dmgBoost':
                     player.bulletColour = PURPLE
                     item.kill()
-                        
+                if item.type == 'portal' and self.redManDead:
+                    self.teleportPlayer = True
+                    
+                                      
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -168,21 +197,22 @@ class Level:
                 if enemy.canShoot and not player.dead:  # Shooting range, height and cooldown
                     if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
-                            enemy.shooting = True
-                            enemy.timeLastShot = pygame.time.get_ticks()
+                            enemy.shooting = True # Allows the enemy to shoot
+                            enemy.timeLastShot = pygame.time.get_ticks() # Resets the shot timer
                 else:
                     enemy.shooting = False
 
 
     def checkDead(self):
-        gameOverFont = pygame.font.SysFont("PT Serif", 60)
-        gameOver = gameOverFont.render('YOU DIED - PRESS TO CONTINUE', True, 'white')
+        gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
+        gameOver = gameOverFont.render('YOU DIED', True, 'white')
+        gameContFont = pygame.font.Font('fonts/Barcade.otf', 50)
+        gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
         
         if self.player.sprite.dead:
-            self.display.blit(gameOver, (200, 300))
-        # if self.player.sprite.cont == True:
-        #     self.playerDead = True
-            
+            music('Play', 0)
+            self.display.blit(gameOver, (425, 300))
+            self.display.blit(gameCont, (300, 450))
             
 
     def drawBG(self):
@@ -215,20 +245,15 @@ class Level:
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
+        self.redMan()
 
         # Items
         self.items.draw(self.display)
         self.pickupItem()
         self.items.update(self.scrollSpeed)
-
-        # Player stuff
-        if not self.playerDead:
-            self.player.update(self.scrollSpeed)
-            self.collisionX()
-            self.collisionY()
-            self.player.draw(self.display)
-            self.player.sprite.healthBar(self.display)
-            self.checkDead()
+        # for item in self.items.sprites():
+        #     if item.type == 'portal':
+        #         item.animate()
 
         # Enemy update
         self.enemies.draw(self.display)
@@ -242,10 +267,21 @@ class Level:
         self.bullets.draw(self.display)
         self.bullets.update(self.scrollSpeed)
         self.bulletHitsCharacter()
-
+        
+        
         for player in self.player:
             if player.shooting:
                 self.bullets.add(player.shoot())
         for enemy in self.enemies:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
+
+        # Player stuff
+        if not self.playerDead:
+            self.player.update(self.scrollSpeed)
+            self.collisionX()
+            self.collisionY()
+            self.player.draw(self.display)
+            self.player.sprite.healthBar(self.display)
+            self.checkDead()
+       

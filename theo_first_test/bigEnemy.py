@@ -33,6 +33,7 @@ class BigEnemy(Character):
         self.bulletOffsetXPlus = 100
         self.bulletOffsetXMinus = 0
         self.bulletOffsetY = 60
+        self.value = 20
 
     # def getSprites(self, pos):
     #     rightLeft = ['right', 'left']

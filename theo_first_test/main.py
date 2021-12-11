@@ -14,31 +14,39 @@ scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
 bg = pygame.image.load('images/background/level_bg.png')
+isMuted = False
 
 
-pygame.display.set_caption('Grandads Treasure')
+pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
-def intro_music():
+
+def music(do, track):
+    if do == 'Play':
    # add music from https://freemusicarchive.org/
-    pygame.mixer.music.load("music/bgm0.mp3")
-    pygame.mixer.music.play(loops=-1)
+        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+        pygame.mixer.music.play(loops=-1)
+    if do == 'Pause':
+        pygame.mixer.music.pause()
+    if do == 'Unpause':
+        pygame.mixer.music.unpause()
+
 
 
 def menu():
-    # intro_music()
-    while True:
 
-        #size of the screen
+    music('Play', 0)
+    while True:
         surface = pygame.Surface((scrnW,scrnH))
+
         #fill screen (colour)
         surface.fill('black')
         background = pygame.transform.scale(bg, (int(bg.get_width() * 2), int(bg.get_height() * 2)))
         surface.blit(background, (0,0))
         #main title
-        main_font = pygame.font.SysFont("Calibri", 80)
-        text_surface = main_font.render('Grandads Treasure', True, 'white')
+        main_font = pygame.font.Font('fonts/Barcade.otf', 100)
+        text_surface = main_font.render('(KILL THE BOSS)', True, 'white')
         scrn.blit(surface,(0,00))
-        scrn.blit(text_surface,(200,100))
+        scrn.blit(text_surface,(260, 80))
 
         mo_x, mo_y = pygame.mouse.get_pos()
 
@@ -51,10 +59,12 @@ def menu():
         instruct = pygame.image.load('images/buttons/button1.png')
         start = pygame.image.load('images/buttons/button2.png')
         end = pygame.image.load('images/buttons/button3.png')
+        audio = pygame.image.load('images/buttons/pause.png')
         #makes drawing faster
         instruct.convert()
         start.convert()
         end.convert()
+        audio.convert()
 
         #rescale the images
         img_width = 0.75
@@ -62,24 +72,27 @@ def menu():
         instruct = pygame.transform.scale(instruct, (int(instruct.get_width() * img_width), int(instruct.get_height() * img_height)))
         start = pygame.transform.scale(start, (int(start.get_width() * img_width), int(start.get_height() * img_height)))
         end = pygame.transform.scale(end, (int(end.get_width() * img_width), int(end.get_height() * img_height)))
-
+        audio = pygame.transform.scale(audio, (int(audio.get_width() * 0.1), int(audio.get_height() * 0.1)))
 
         #returns a rectangular object from the image
         rect1 = instruct.get_rect()
         rect2 = start.get_rect()
         rect3 = end.get_rect()
+        rect5 = audio.get_rect()
         #centre image rectangle to these coordinates
-        FROM_LEFT = 100
-        DOWN = 200
-        NEXT = 100
+        DOWN = 250
+        NEXT = 50
 
-        rect1.topleft = (FROM_LEFT,DOWN)
-        rect2.topleft = (FROM_LEFT, DOWN + NEXT)
-        rect3.topleft = (FROM_LEFT, DOWN + NEXT + NEXT)
+        rect1.center = (scrnW // 2, DOWN + NEXT)
+        rect2.center = (scrnW // 2, DOWN + NEXT * 3)
+        rect3.center = (scrnW // 2, DOWN + NEXT * 5)
+        rect5.topleft = (50, 728)
         #display image
         scrn.blit(instruct, rect1)
         scrn.blit(start, rect2)
         scrn.blit(end, rect3)
+        scrn.blit(audio, rect5)
+
 
 
         for event in pygame.event.get():
@@ -95,6 +108,16 @@ def menu():
                 if rect3.collidepoint((mo_x, mo_y)):
                     pygame.quit()
                     sys.exit()
+                if rect5.collidepoint((mo_x, mo_y)):
+                    #boolean
+                    global isMuted
+                    if not isMuted:
+                        music('Pause', 0)
+                        isMuted = True
+                    elif isMuted:
+                        music('Unpause', 0)
+                        isMuted = False
+
 
         pygame.display.update()
         clock.tick(60)
@@ -103,15 +126,15 @@ def menu():
 # Button leads to new screen
 def instructions():
 
-    running = True
-    while running:
+
+    while True:
         mo_x, mo_y = pygame.mouse.get_pos()
         scrn.fill(('white'))
         back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()
-        rect4.topleft = (5,30)
+        rect4.topleft = (5,60)
         scrn.blit(back, rect4)
 
         for event in pygame.event.get():
@@ -121,32 +144,37 @@ def instructions():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if rect4.collidepoint((mo_x, mo_y)):
                     menu()
-               # if event.key == pygame.K_ESCAPE:
                     running = False
 
         pygame.display.update()
         clock.tick(60)
 
-def music():
-   # add music from https://freemusicarchive.org/
-    pygame.mixer.music.load("music/bgm1.mp3") # Defrini - The Chonker
-    pygame.mixer.music.play(loops=-1)
-
 def game():
     global level
-    # music()
+    global isMuted
+
+    if not isMuted:
+        music('Play', 1)
+        # isMuted = True
+    elif isMuted:
+        music('Pause', 1)
+        # isMuted = False
+
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.mixer.music.stop()
+                    # pygame.mixer.music.stop()
+                    menu()
+                if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
+                    level = Level(levelLayout, scrn)
                     menu()
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-                
-                
-                
+            if level.teleportPlayer == True:
+                level = Level(bossRoomLayout, scrn)
 
 
         scrn.fill('black')

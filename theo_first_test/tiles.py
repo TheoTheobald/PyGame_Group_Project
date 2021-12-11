@@ -11,6 +11,7 @@ import pygame
 from settings import tileSize
 
 class Tile(pygame.sprite.Sprite):
+    className = 'tile'
     def __init__(self, pos, size, tType):
         super().__init__()
         img = pygame.image.load(f"images/tile/{tType}.png")
