@@ -65,11 +65,10 @@ class BossEnemy(Character):
         self.rect.x += xShift
         self.animate()
         self.horizontal_motion()
+        self.die()
 
     def horizontal_motion(self):
         if not (self.mean):
-            # if self.rect.midbottom == self.pos and self.criteria:
-            #     return
             self.rect.x -= self.speed
             if self.rect.left < 0:
                 self.speed = random.randint(5, 16)
@@ -79,5 +78,4 @@ class BossEnemy(Character):
             if self.rect.x > scrnW - 150:
                 self.speed = random.randint(5, 16)
                 self.mean = False
-                # self.criteria = True
 

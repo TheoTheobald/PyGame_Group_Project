@@ -44,8 +44,6 @@ bossLayout = ['____________________',
 tileSize = 64
 scrnW = 1280
 scrnH = tileSize * len(levelLayout)
-levelLength = len(levelLayout[0])
-bosslevelLength = len(bossLayout[0])
 
 # Colours
 GREEN = pygame.Color(0, 255, 0)
