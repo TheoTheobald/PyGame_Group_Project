@@ -14,7 +14,7 @@ from player import Player
 from enemy import Enemy
 from bigEnemy import BigEnemy
 from bossenemy import BossEnemy
-from items import Item
+from items import Item, Portal
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -28,6 +28,11 @@ class Level:
         self.playerDead = False
         self.scrollSpeed = 0
         self.scrollBG = 0
+        
+        self.redManDead = True
+        self.teleportPlayer = False
+        
+        self.playerBossHit = pygame.time.get_ticks()
 
 
     def placeTiles(self, layout):
@@ -45,7 +50,7 @@ class Level:
                     player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy((x, y+10))
+                    enemy = Enemy((x, y + 10))
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Item(((x + tileSize/5), y + 29), 'healthpack')
@@ -56,8 +61,11 @@ class Level:
                 elif cell == 'D':
                     dmgBoost = Item(((x + tileSize/5), y + 29), 'dmgBoost')
                     self.items.add(dmgBoost)
+                elif cell == 'Q':
+                    portal = Portal((x, y), 'portal')
+                    self.items.add(portal)
                 elif cell == 'B':
-                    boss = BossEnemy((x - 60, y - 120))
+                    boss = BossEnemy((x - 60, y+90))
                     self.enemies.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))
@@ -142,11 +150,24 @@ class Level:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (50,100)
         self.display.blit(text_surface, text_rect)
-                    
-
-
-
-
+             
+    def boss_collision(self):
+        player = self.player.sprite
+        for enemy in self.enemies:
+            if enemy.className == 'boss':
+                if enemy.rect.colliderect(player.rect) and self.playerBossHit + 1000 < pygame.time.get_ticks():
+                    player.health -= 75
+                    self.playerBossHit = pygame.time.get_ticks()
+    
+    def redMan(self):
+        redDead = True
+        for enemy in self.enemies:
+            if enemy.className == 'bigEnemy':
+                redDead = False
+            else:
+                pass
+        if redDead:
+            self.redManDead = True
 
     def pickupItem(self):
         player = self.player.sprite
@@ -166,7 +187,10 @@ class Level:
                 if item.type == 'dmgBoost':
                     player.bulletColour = PURPLE
                     item.kill()
-                        
+                if item.type == 'portal' and self.redManDead:
+                    self.teleportPlayer = True
+                    
+                                      
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -182,8 +206,8 @@ class Level:
                 if enemy.canShoot and not player.dead:  # Shooting range, height and cooldown
                     if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
-                            enemy.shooting = True
-                            enemy.timeLastShot = pygame.time.get_ticks()
+                            enemy.shooting = True # Allows the enemy to shoot
+                            enemy.timeLastShot = pygame.time.get_ticks() # Resets the shot timer
                 else:
                     enemy.shooting = False
 
@@ -198,8 +222,6 @@ class Level:
             music('Play', 0)
             self.display.blit(gameOver, (425, 300))
             self.display.blit(gameCont, (300, 450))
-            
-            
             
 
     def drawBG(self):
@@ -232,6 +254,7 @@ class Level:
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
+        self.redMan()
 
         # Items
         self.items.draw(self.display)
@@ -242,6 +265,7 @@ class Level:
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
+        self.boss_collision()
 
         for enemy in self.enemies:
             enemy.healthBar(self.display)
@@ -267,4 +291,4 @@ class Level:
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
             self.checkDead()
-       
+      

@@ -6,9 +6,10 @@ Boss Enemy
 
 @author: theot
 """
-import pygame, os
+import pygame, os, random
 from settings import *
 from character import Character
+#from random import randomint
 
 
 class BossEnemy(Character):
@@ -23,13 +24,19 @@ class BossEnemy(Character):
         self.updateTime = pygame.time.get_ticks()
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
-        self.rect = self.image.get_rect(topleft=pos)
-        
+        self.rect = self.image.get_rect(midbottom=pos)
+        #Creating variables for horizontal motion of boss
+        self.speed = 2
+        self.mean=False #This for ensuring that
+        self.criteria=False #This will ensure that boss returns back to orginal starting position
+        self.motion_1=True
+        self.motion_2=False #To initiate second type of horizontal motion
+        self.motion_3=False #To initiate third type of horizontal motion
+        self.time_boss_motion=200
 
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 500
-        self.value = 50
 
     def getSprites(self, pos):
         frames = len(os.listdir("images/boss"))
@@ -57,3 +64,20 @@ class BossEnemy(Character):
     def update(self, xShift):
         self.rect.x += xShift
         self.animate()
+        self.horizontal_motion()
+
+    def horizontal_motion(self):
+        if not (self.mean):
+            # if self.rect.midbottom == self.pos and self.criteria:
+            #     return
+            self.rect.x -= self.speed
+            if self.rect.left < 0:
+                self.speed = random.randint(5, 18)
+                self.mean = True
+        else:
+            self.rect.x += self.speed
+            if self.rect.x > scrnW - 150:
+                self.speed = random.randint(5, 18)
+                self.mean = False
+                # self.criteria = True
+
