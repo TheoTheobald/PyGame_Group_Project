@@ -57,3 +57,13 @@ def timeGap(startTime, pause):
     while startTime + pause < pygame.time.get_ticks():
         pass
     return True
+
+def music(do, track):
+    if do == 'Play':
+   # add music from https://freemusicarchive.org/
+        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+        pygame.mixer.music.play(loops=-1)
+    if do == 'Pause':
+        pygame.mixer.music.pause()
+    if do == 'Unpause':
+        pygame.mixer.music.unpause()

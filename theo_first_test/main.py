@@ -30,31 +30,31 @@ def music(do, track):
     if do == 'Unpause':
         pygame.mixer.music.unpause()
 
-            
+
 
 def menu():
-    
+
     music('Play', 0)
     while True:
         surface = pygame.Surface((scrnW,scrnH))
-        
+
         #fill screen (colour)
         surface.fill('black')
         background = pygame.transform.scale(bg, (int(bg.get_width() * 2), int(bg.get_height() * 2)))
         surface.blit(background, (0,0))
         #main title
-        main_font = pygame.font.SysFont("Calibri", 80)
-        text_surface = main_font.render('KILL THE BOSS', True, 'white') 
+        main_font = pygame.font.Font('fonts/Barcade.otf', 100)
+        text_surface = main_font.render('(KILL THE BOSS)', True, 'white')
         scrn.blit(surface,(0,00))
-        scrn.blit(text_surface,(200,100))
-        
+        scrn.blit(text_surface,(260, 80))
+
         mo_x, mo_y = pygame.mouse.get_pos()
 
 
         #size of rectangle buttons and their coordinates
         small_font = pygame.font.SysFont("Verdana", 20)
 
-        
+
         #load images
         instruct = pygame.image.load('images/buttons/button1.png')
         start = pygame.image.load('images/buttons/button2.png')
@@ -80,14 +80,13 @@ def menu():
         rect3 = end.get_rect()
         rect5 = audio.get_rect()
         #centre image rectangle to these coordinates
-        FROM_LEFT = 200
         DOWN = 250
-        NEXT = 100
+        NEXT = 50
 
-        rect1.topleft = (FROM_LEFT,DOWN)
-        rect2.topleft = (FROM_LEFT, DOWN + NEXT)
-        rect3.topleft = (FROM_LEFT, DOWN + NEXT + NEXT)
-        rect5.topleft = (FROM_LEFT, DOWN + NEXT + NEXT + NEXT + NEXT)
+        rect1.center = (scrnW // 2, DOWN + NEXT)
+        rect2.center = (scrnW // 2, DOWN + NEXT * 3)
+        rect3.center = (scrnW // 2, DOWN + NEXT * 5)
+        rect5.topleft = (50, 728)
         #display image
         scrn.blit(instruct, rect1)
         scrn.blit(start, rect2)
@@ -95,7 +94,7 @@ def menu():
         scrn.blit(audio, rect5)
 
 
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 pygame.quit()
@@ -111,14 +110,14 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-                    global isMuted
+
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True
                     elif isMuted:
                         music('Unpause', 0)
                         isMuted = False
-                        
+
 
         pygame.display.update()
         clock.tick(60)
@@ -126,8 +125,9 @@ def menu():
 
 # Button leads to new screen
 def instructions():
-    running = True
-    while running:
+
+
+    while True:
         mo_x, mo_y = pygame.mouse.get_pos()
         scrn.fill(('white'))
         back = pygame.image.load('images/buttons/button4.png')
@@ -152,17 +152,20 @@ def instructions():
 def game():
     global level
     global isMuted
+
     if not isMuted:
         music('Play', 1)
-        isMuted = True
+        # isMuted = True
     elif isMuted:
         music('Pause', 1)
-        isMuted = False
+        # isMuted = False
+
+
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.mixer.music.stop()
+                    # pygame.mixer.music.stop()
                     menu()
                 if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
                     level = Level(levelLayout, scrn)
