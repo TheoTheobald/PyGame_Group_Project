@@ -110,7 +110,7 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-
+                    global isMuted
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True
