@@ -19,6 +19,9 @@ isMuted = False
 
 pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
+icon = pygame.image.load('images/icon/icon.png')
+icon = pygame.transform.scale(icon, (32,32))
+pygame.display.set_icon(icon)
 
 def music(do, track):
     if do == 'Play':

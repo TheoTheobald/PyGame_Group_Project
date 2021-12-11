@@ -204,15 +204,29 @@ class Level:
 
 
     def checkDead(self):
+        player = self.player.sprite
         gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
-        gameOver = gameOverFont.render('YOU DIED', True, 'white')
+        scoreFont = pygame.font.Font('fonts/Barcade.otf', 60)
         gameContFont = pygame.font.Font('fonts/Barcade.otf', 50)
-        gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
         
-        if self.player.sprite.dead:
-            music('Play', 0)
-            self.display.blit(gameOver, (425, 300))
-            self.display.blit(gameCont, (300, 450))
+        gameOver = gameOverFont.render('YOU DIED', True, 'white')
+        gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
+        finalScore = scoreFont.render(f'Your Score is {player.score}', True, 'yellow')
+        
+        gameOverRect = gameOver.get_rect()
+        gameContRect = gameCont.get_rect()
+        finalScoreRect = finalScore.get_rect()
+        
+        gameOverRect.midtop = (scrnW // 2, 200)
+        gameContRect.midtop = (scrnW // 2, 450)
+        finalScoreRect.midtop = (scrnW // 2, 350)
+        
+        
+        if player.dead:
+            self.display.blit(gameOver, gameOverRect)
+            self.display.blit(finalScore, finalScoreRect)
+            self.display.blit(gameCont, gameContRect)
+            
             
 
     def drawBG(self):
@@ -236,7 +250,9 @@ class Level:
             self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
     
     
-        
+    # def boss_collision(self):
+    #     if self.bossenemy.rect.collide_rect(self.player.rect):
+    #         self.player.health = self.player.health - 25   
         
     def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
 
@@ -259,7 +275,7 @@ class Level:
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
-        self.boss_collision()
+        # self.boss_collision()
 
         for enemy in self.enemies:
             enemy.healthBar(self.display)
@@ -277,7 +293,7 @@ class Level:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
 
-<<<<<<< Updated upstream
+
         # Player stuff
         if not self.playerDead:
             self.player.update(self.scrollSpeed)
@@ -287,8 +303,6 @@ class Level:
             self.player.sprite.healthBar(self.display)
             self.checkDead()
        
-=======
-    def boss_collision(self):
-        if self.bossenemy.rect.collide_rect(self.player.rect):
-            self.player.health = self.player.health - 25
->>>>>>> Stashed changes
+
+   
+
