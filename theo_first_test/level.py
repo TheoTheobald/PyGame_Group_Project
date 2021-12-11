@@ -26,10 +26,11 @@ class Level:
         self.placeTiles(levelLayout)
         self.bullets = pygame.sprite.Group()
         self.playerDead = False
+        self.levelLength = len(levelLayout[0])
         self.scrollSpeed = 0
         self.scrollBG = 0
 
-        self.redManDead = False
+        self.redManDead = True
         self.teleportPlayer = False
 
         self.playerBossHit = pygame.time.get_ticks()
@@ -81,7 +82,7 @@ class Level:
         if (xPos < scrnW / 3 and self.scrollBG > abs(5)) and xDir < 0:
             self.scrollSpeed = 5
             player.speed = 0
-        elif (xPos > (scrnW * 2 / 3) and self.scrollBG < (levelLength * tileSize) - scrnW) and xDir > 0:
+        elif (xPos > (scrnW * 2 / 3) and self.scrollBG < (self.levelLength * tileSize) - scrnW) and xDir > 0:
             self.scrollSpeed = -5
             player.speed = 0
         elif (xPosLeft + self.scrollSpeed < 0) and xDir < 0:
