@@ -9,6 +9,7 @@ Boss Enemy
 import pygame, os
 from settings import *
 from character import Character
+#from random import randomint
 
 
 class BossEnemy(Character):
@@ -23,9 +24,14 @@ class BossEnemy(Character):
         self.updateTime = pygame.time.get_ticks()
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
-        self.rect = self.image.get_rect(topleft=pos)
-        self.mean=False
-        self.criteria=False
+        self.rect = self.image.get_rect(midbottom=pos)
+        #Creating variables for horizontal motion of boss
+        self.mean=False #This for ensuring that
+        self.criteria=False #This will ensure that boss returns back to orginal starting position
+        self.motion_1=True
+        self.motion_2=False #To initiate second type of horizontal motion
+        self.motion_3=False #To initiate third type of horizontal motion
+        self.time_boss_motion=200
 
         self.totalHealth = 2000
         self.health = 2000
@@ -57,17 +63,30 @@ class BossEnemy(Character):
     def update(self, xShift):
         self.rect.x += xShift
         self.animate()
-        self.horitzonal_motion()
+        #self.boss_collision()
+        if  self.motion_1:           #motion_1
+            self.horizontal_motion(2)
+            self.motion_1=False
+            self.motion_2=True
+        elif  self.motion_2:           #motion_2
+            self.horizontal_motion(5)
+            self.motion_3=True
+            self.motion_2=False
+        elif  self.motion_3:           #motion_3
+            self.horizontal_motion(10)
+            self.motion_3=False
+            self.motion_1=True
 
-    def horitzonal_motion(self):
+    def horizontal_motion(self,speed):
         if not (self.mean):
-            if self.rect.midbottom == (self.pos[0], self.pos[1]) and self.criteria:
+            if self.rect.midbottom == self.pos and self.criteria:
                 return
-            self.rect.x -= 5
+            self.rect.x -= speed
             if self.rect.left < 0:
                 self.mean = True
         else:
-            self.rect.x += 5
+            self.rect.x += speed
             if self.rect.x > scrnW - 150:
                 self.mean = False
                 self.criteria = True
+

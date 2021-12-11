@@ -63,7 +63,7 @@ class Level:
                     portal = Portal((x, y), 'portal')
                     self.items.add(portal)
                 elif cell == 'B':
-                    boss = BossEnemy((x - 60, y-95))
+                    boss = BossEnemy((x - 60, y+90))
                     self.enemies.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))
@@ -259,6 +259,7 @@ class Level:
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
+        self.boss_collision()
 
         for enemy in self.enemies:
             enemy.healthBar(self.display)
@@ -276,6 +277,7 @@ class Level:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
 
+<<<<<<< Updated upstream
         # Player stuff
         if not self.playerDead:
             self.player.update(self.scrollSpeed)
@@ -285,3 +287,8 @@ class Level:
             self.player.sprite.healthBar(self.display)
             self.checkDead()
        
+=======
+    def boss_collision(self):
+        if self.bossenemy.rect.collide_rect(self.player.rect):
+            self.player.health = self.player.health - 25
+>>>>>>> Stashed changes
