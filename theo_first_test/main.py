@@ -33,10 +33,10 @@ def menu():
         background = pygame.transform.scale(bg, (int(bg.get_width() * 2), int(bg.get_height() * 2)))
         surface.blit(background, (0,0))
         #main title
-        main_font = pygame.font.SysFont("Calibri", 80)
-        text_surface = main_font.render('KILL THE BOSS', True, 'white')
+        main_font = pygame.font.Font('fonts/Barcade.otf', 100)
+        text_surface = main_font.render('(KILL THE BOSS)', True, 'white')
         scrn.blit(surface,(0,00))
-        scrn.blit(text_surface,(200,100))
+        scrn.blit(text_surface,(260, 80))
 
         mo_x, mo_y = pygame.mouse.get_pos()
 
@@ -72,12 +72,12 @@ def menu():
         #centre image rectangle to these coordinates
         FROM_LEFT = 200
         DOWN = 250
-        NEXT = 100
+        NEXT = 50
 
-        rect1.topleft = (FROM_LEFT,DOWN)
-        rect2.topleft = (FROM_LEFT, DOWN + NEXT)
-        rect3.topleft = (FROM_LEFT, DOWN + NEXT + NEXT)
-        rect5.topleft = (FROM_LEFT, DOWN + NEXT + NEXT + NEXT + NEXT)
+        rect1.center = (scrnW // 2, DOWN + NEXT)
+        rect2.center = (scrnW // 2, DOWN + NEXT * 3)
+        rect3.center = (scrnW // 2, DOWN + NEXT * 5)
+        rect5.topleft = (50, 728)
         #display image
         scrn.blit(instruct, rect1)
         scrn.blit(start, rect2)
@@ -117,8 +117,8 @@ def menu():
 # Button leads to new screen
 def instructions():
 
-    running = True
-    while running:
+    
+    while True:
         mo_x, mo_y = pygame.mouse.get_pos()
         scrn.fill(('white'))
         back = pygame.image.load('images/buttons/button4.png')
@@ -136,7 +136,7 @@ def instructions():
                 if rect4.collidepoint((mo_x, mo_y)):
                     menu()
                # if event.key == pygame.K_ESCAPE:
-                    running = False
+                    
 
         pygame.display.update()
         clock.tick(60)
@@ -144,12 +144,15 @@ def instructions():
 def game():
     global level
     global isMuted
+    
     if not isMuted:
         music('Play', 1)
         # isMuted = True
     elif isMuted:
         music('Pause', 1)
         # isMuted = False
+        
+        
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
