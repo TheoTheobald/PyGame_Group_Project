@@ -91,7 +91,7 @@ class Level:
         else:
             self.scrollSpeed = 0
             player.speed = 5
-
+    
     def collisionX(self):
 
         player = self.player.sprite
