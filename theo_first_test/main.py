@@ -23,15 +23,15 @@ icon = pygame.image.load('images/icon/icon.png')
 icon = pygame.transform.scale(icon, (32,32))
 pygame.display.set_icon(icon)
 
-def music(do, track):
-    if do == 'Play':
-   # add music from https://freemusicarchive.org/
-        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-        pygame.mixer.music.play(loops=-1)
-    if do == 'Pause':
-        pygame.mixer.music.pause()
-    if do == 'Unpause':
-        pygame.mixer.music.unpause()
+# def music(do, track):
+#     if do == 'Play':
+#    # add music from https://freemusicarchive.org/
+#         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+#         pygame.mixer.music.play(loops=-1)
+#     if do == 'Pause':
+#         pygame.mixer.music.pause()
+#     if do == 'Unpause':
+#         pygame.mixer.music.unpause()
 
 
 
