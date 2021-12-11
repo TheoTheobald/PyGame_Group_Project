@@ -72,12 +72,12 @@ class BossEnemy(Character):
             #     return
             self.rect.x -= self.speed
             if self.rect.left < 0:
-                self.speed = random.randint(5, 18)
+                self.speed = random.randint(5, 16)
                 self.mean = True
         else:
             self.rect.x += self.speed
             if self.rect.x > scrnW - 150:
-                self.speed = random.randint(5, 18)
+                self.speed = random.randint(5, 16)
                 self.mean = False
                 # self.criteria = True
 

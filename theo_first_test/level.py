@@ -29,7 +29,7 @@ class Level:
         self.scrollSpeed = 0
         self.scrollBG = 0
         
-        self.redManDead = True
+        self.redManDead = False
         self.teleportPlayer = False
         
         self.playerBossHit = pygame.time.get_ticks()
@@ -127,6 +127,8 @@ class Level:
     def bulletHitsCharacter(self):
         player = self.player.sprite
         for bullet in self.bullets.sprites():
+            if bullet.rect.x > 6000 or bullet.rect.x < 0:
+                bullet.kill()
             if bullet.rect.colliderect(player.rect):
                 player.health -= 10
                 if bullet.colour == LAVA:
