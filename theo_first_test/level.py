@@ -125,8 +125,10 @@ class Level:
                     player.health -= 10
                 bullet.kill()
             for enemy in self.enemies.sprites():
-                if bullet.rect.colliderect(enemy.rect) and enemy.dead:  #if bullet kills enemy
-                    player.score += 10 #increment score
+                
+                if enemy.dead and not enemy.scoreGiven:  #if bullet kills enemy
+                    player.score += enemy.value #increment score
+                    enemy.scoreGiven = True
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
                     enemy.health -= 10
                     if bullet.colour == LAVA:
@@ -135,10 +137,10 @@ class Level:
                         enemy.health -= 10
                     bullet.kill()
         #display score to screen   
-        font = pygame.font.Font(pygame.font.match_font('arial'), 18)
+        font = pygame.font.Font(pygame.font.match_font('arial'), 30)
         text_surface = font.render(str(player.score), True, 'white')
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (100,200)
+        text_rect.midtop = (50,100)
         self.display.blit(text_surface, text_rect)
                     
 
