@@ -36,8 +36,11 @@ def music(do, track):
 
 
 def menu():
+    global level
+    global isMuted
 
-    music('Play', 0)
+    if not isMuted:
+        music('Play', 0)
     while True:
         surface = pygame.Surface((scrnW,scrnH))
 
@@ -113,7 +116,7 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-                    global isMuted
+                    
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True

@@ -261,10 +261,6 @@ class Level:
             self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
 
 
-    # def boss_collision(self):
-    #     if self.bossenemy.rect.collide_rect(self.player.rect):
-    #         self.player.health = self.player.health - 25
-
     def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
 
         # Level stuff
@@ -283,7 +279,7 @@ class Level:
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
-        # self.boss_collision()
+        self.boss_collision()
 
         for enemy in self.enemies:
             enemy.healthBar(self.display)
