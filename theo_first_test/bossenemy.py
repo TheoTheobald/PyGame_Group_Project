@@ -27,7 +27,6 @@ class BossEnemy(Character):
         self.rect = self.image.get_rect(midbottom=pos)
         self.speed = 8
         self.mean=False 
-        self.time_boss_motion=200
 
         self.totalHealth = 2000
         self.health = 2000
