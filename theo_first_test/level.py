@@ -29,8 +29,10 @@ class Level:
         self.scrollSpeed = 0
         self.scrollBG = 0
         
-        self.redManDead = False
+        self.redManDead = True
         self.teleportPlayer = False
+        
+        self.playerBossHit = pygame.time.get_ticks()
 
 
     def placeTiles(self, layout):
@@ -149,6 +151,13 @@ class Level:
         text_rect.midtop = (50,100)
         self.display.blit(text_surface, text_rect)
              
+    def boss_collision(self):
+        player = self.player.sprite
+        for enemy in self.enemies:
+            if enemy.className == 'boss':
+                if enemy.rect.colliderect(player.rect) and self.playerBossHit + 1000 < pygame.time.get_ticks():
+                    player.health -= 75
+                    self.playerBossHit = pygame.time.get_ticks()
     
     def redMan(self):
         redDead = True
@@ -251,9 +260,6 @@ class Level:
         self.items.draw(self.display)
         self.pickupItem()
         self.items.update(self.scrollSpeed)
-        # for item in self.items.sprites():
-        #     if item.type == 'portal':
-        #         item.animate()
 
         # Enemy update
         self.enemies.draw(self.display)
@@ -277,7 +283,6 @@ class Level:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
 
-<<<<<<< Updated upstream
         # Player stuff
         if not self.playerDead:
             self.player.update(self.scrollSpeed)
@@ -286,9 +291,4 @@ class Level:
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
             self.checkDead()
-       
-=======
-    def boss_collision(self):
-        if self.bossenemy.rect.collide_rect(self.player.rect):
-            self.player.health = self.player.health - 25
->>>>>>> Stashed changes
+      

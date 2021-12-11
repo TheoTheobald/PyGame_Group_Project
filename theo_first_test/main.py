@@ -174,7 +174,11 @@ def game():
                 pygame.quit()
                 sys.exit()
             if level.teleportPlayer == True:
-                level = Level(bossRoomLayout, scrn)
+                player = level.player.sprite
+                level = Level(bossLayout, scrn)
+                player.rect = level.player.sprite.rect
+                level.player.sprite = player
+                
 
 
         scrn.fill('black')
