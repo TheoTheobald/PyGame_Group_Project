@@ -20,19 +20,11 @@ isMuted = False
 pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
 
-def music(do, track):
-    if do == 'Play':
-   # add music from https://freemusicarchive.org/
-        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-        pygame.mixer.music.play(loops=-1)
-    if do == 'Pause':
-        pygame.mixer.music.pause()
-    if do == 'Unpause':
-        pygame.mixer.music.unpause()
-
 
 def menu():
-    music('Play', 0)
+    global isMuted
+    if not isMuted:
+        music('Play', 0)
     while True:
         surface = pygame.Surface((scrnW,scrnH))
         
@@ -109,7 +101,7 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-                    global isMuted
+                    
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True
@@ -154,15 +146,15 @@ def game():
     global isMuted
     if not isMuted:
         music('Play', 1)
-        isMuted = True
+        # isMuted = True
     elif isMuted:
         music('Pause', 1)
-        isMuted = False
+        # isMuted = False
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.mixer.music.stop()
+                    # pygame.mixer.music.stop()
                     menu()
                 if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
                     level = Level(levelLayout, scrn)
