@@ -44,6 +44,8 @@ bossLayout = ['____________________',
 tileSize = 64
 scrnW = 1280
 scrnH = tileSize * len(levelLayout)
+levelLength = len(levelLayout[0])
+bosslevelLength = len(bossLayout[0])
 
 # Colours
 GREEN = pygame.Color(0, 255, 0)
@@ -51,11 +53,14 @@ RED = pygame.Color(255, 0, 0)
 PURPLE = pygame.Color(200, 0, 255)
 LAVA = pygame.Color(207, 16, 32)
 
+# sound effects
+# playerGun = pygame.
 
 def music(do, track):
     if do == 'Play':
    # add music from https://freemusicarchive.org/
         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+        pygame.mixer.music.set_volume(0.5)
         pygame.mixer.music.play(loops=-1)
     if do == 'Pause':
         pygame.mixer.music.pause()
