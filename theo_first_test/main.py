@@ -196,7 +196,7 @@ def game():
                 level = Level(bossLayout, scrn)
                 player.rect = level.player.sprite.rect
                 level.player.sprite = player
-                
+                music('Play',2)
 
 
         scrn.fill('black')
