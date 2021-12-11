@@ -17,9 +17,11 @@ class Enemy(Character):
     def __init__(self, pos):
         super().__init__(pos)
         self.totalHealth = 60
+        self.value = 5
         self.health = 60
         # self.hasSpace = self.checkHasSpace()
         self.getSprites(pos)
+        
 
     # def checkHasSpace(self):
     #     """This method checks if the enemy has space to move"""

@@ -24,10 +24,12 @@ class BossEnemy(Character):
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
         self.rect = self.image.get_rect(topleft=pos)
+        
 
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 500
+        self.value = 50
 
     def getSprites(self, pos):
         frames = len(os.listdir("images/boss"))

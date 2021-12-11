@@ -29,6 +29,7 @@ class Character(pygame.sprite.Sprite):
         self.bulletOffsetXMinus = -10
         self.bulletOffsetY = 25
         self.dead = False
+        self.scoreGiven = False
 
         # Char movement
         self.direction = pygame.math.Vector2(0, 0)
