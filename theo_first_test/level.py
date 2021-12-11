@@ -41,10 +41,7 @@ class Level:
             for colIndex, cell in enumerate(row):
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
-                if cell == 'X':
-                    tile = Tile((x, y), tileSize, cell)
-                    self.tiles.add(tile)
-                elif cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
+                if cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':
                     tile = Tile((x, y), tileSize, cell)
                     self.tiles.add(tile)
                 elif cell == 'P':
@@ -94,7 +91,6 @@ class Level:
             player.speed = 5
     
     def collisionX(self):
-
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
 

@@ -25,8 +25,17 @@ class BossEnemy(Character):
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
         self.rect = self.image.get_rect(midbottom=pos)
+<<<<<<< Updated upstream
         self.speed = 8
         self.mean=False 
+=======
+        self.value = 100
+        
+        #Creating variables for horizontal motion of boss
+        self.speed = 2
+        self.mean=False #This for ensuring that
+        self.time_boss_motion=200
+>>>>>>> Stashed changes
 
         self.totalHealth = 2000
         self.health = 2000
@@ -69,7 +78,12 @@ class BossEnemy(Character):
                 self.mean = True
         else:
             self.rect.x += self.speed
+<<<<<<< Updated upstream
             if self.rect.x > scrnW - 150:
                 self.speed = random.randint(10, 20)
+=======
+            if self.rect.x > scrnW - self.image.get_width():
+                self.speed = random.randint(5, 16)
+>>>>>>> Stashed changes
                 self.mean = False
 

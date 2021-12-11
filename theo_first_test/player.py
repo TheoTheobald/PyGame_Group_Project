@@ -17,7 +17,6 @@ class Player(Character):
 
     def __init__(self, pos):
         super().__init__(pos)
-        self.canTeleport = False
         self.cont = False
 
         # Player combat

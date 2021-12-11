@@ -72,14 +72,13 @@ class Character(pygame.sprite.Sprite):
             self.frameIndex = 0
 
     def shoot(self):
+        yPos = self.rect.y + self.bulletOffsetY
         if self.facing == 0:
             Dir = 1
             xPos = self.rect.x + self.bulletOffsetXPlus
-            yPos = self.rect.y + self.bulletOffsetY
         elif self.facing == 1:
             Dir = -1
             xPos = self.rect.x + self.bulletOffsetXMinus
-            yPos = self.rect.y + self.bulletOffsetY
         return Projectile(xPos, yPos, self.bulletThickness, self.bulletColour, Dir, self.bulletSpeed)
 
     def shootRate(self):
@@ -102,7 +101,7 @@ class Character(pygame.sprite.Sprite):
     def die(self):
         if self.health <= 0:
             self.dead = True
-            if self.className == 'bigEnemy':
+            if self.className == 'bigEnemy' or self.className == 'boss':
                 self.stance = 1
             else:
                 self.stance = 3
