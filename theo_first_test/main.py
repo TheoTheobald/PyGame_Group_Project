@@ -70,7 +70,6 @@ def menu():
         rect3 = end.get_rect()
         rect5 = audio.get_rect()
         #centre image rectangle to these coordinates
-        FROM_LEFT = 200
         DOWN = 250
         NEXT = 50
 

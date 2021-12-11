@@ -9,7 +9,7 @@ Level creator
 
 import pygame, sys
 from tiles import *
-from settings import tileSize, scrnW, PURPLE, LAVA, levelLength
+from settings import *
 from player import Player
 from enemy import Enemy
 from bigEnemy import BigEnemy
@@ -175,11 +175,16 @@ class Level:
 
 
     def checkDead(self):
-        gameOverFont = pygame.font.SysFont("PT Serif", 60)
-        gameOver = gameOverFont.render('YOU DIED - PRESS ENTER TO CONTINUE', True, 'white')
+        gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
+        gameOver = gameOverFont.render('YOU DIED', True, 'white')
+        gameContFont = pygame.font.Font('fonts/Barcade.otf', 50)
+        gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
         
         if self.player.sprite.dead:
-            self.display.blit(gameOver, (200, 300))
+            music('Play', 0)
+            self.display.blit(gameOver, (425, 300))
+            self.display.blit(gameCont, (300, 450))
+            
             
             
 
