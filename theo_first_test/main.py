@@ -13,7 +13,7 @@ pygame.init()
 scrn = pygame.display.set_mode((scrnW, scrnH))
 clock = pygame.time.Clock()
 level = Level(levelLayout, scrn)
-bg = pygame.image.load('images/background/level_bg.png')
+bg = pygame.image.load('images/background/5.png')
 isMuted = False
 
 
@@ -132,13 +132,25 @@ def instructions():
 
     while True:
         mo_x, mo_y = pygame.mouse.get_pos()
-        scrn.fill(('white'))
+       # scrn.fill(('white'))
+        
+       
+        bg = pygame.image.load('images/background/inst_bg.png')
+        bg.convert()
+        bg = pygame.transform.scale(bg, (int(bg.get_width() * 1.35), int(bg.get_height() * 1.55)))
+        rect6 = bg.get_rect()
+        rect6.topleft = (0,50)
+        scrn.blit(bg, rect6)
+        
         back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()
         rect4.topleft = (5,60)
         scrn.blit(back, rect4)
+        
+
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -177,7 +189,11 @@ def game():
                 pygame.quit()
                 sys.exit()
             if level.teleportPlayer == True:
-                level = Level(bossRoomLayout, scrn)
+                player = level.player.sprite
+                level = Level(bossLayout, scrn)
+                player.rect = level.player.sprite.rect
+                level.player.sprite = player
+                
 
 
         scrn.fill('black')

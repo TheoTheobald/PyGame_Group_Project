@@ -28,9 +28,11 @@ class Level:
         self.playerDead = False
         self.scrollSpeed = 0
         self.scrollBG = 0
-        
+
         self.redManDead = False
         self.teleportPlayer = False
+
+        self.playerBossHit = pygame.time.get_ticks()
 
 
     def placeTiles(self, layout):
@@ -91,7 +93,7 @@ class Level:
             player.speed = 5
 
     def collisionX(self):
-        
+
         player = self.player.sprite
         player.rect.x += player.direction.x * player.speed
 
@@ -121,17 +123,19 @@ class Level:
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
-                            
+
     def bulletHitsCharacter(self):
         player = self.player.sprite
         for bullet in self.bullets.sprites():
+            if bullet.rect.x > 6000 or bullet.rect.x < 0:
+                bullet.kill()
             if bullet.rect.colliderect(player.rect):
                 player.health -= 10
                 if bullet.colour == LAVA:
                     player.health -= 10
                 bullet.kill()
             for enemy in self.enemies.sprites():
-                
+
                 if enemy.dead and not enemy.scoreGiven:  #if bullet kills enemy
                     player.score += enemy.value #increment score
                     enemy.scoreGiven = True
@@ -142,14 +146,21 @@ class Level:
                     if bullet.colour == PURPLE:
                         enemy.health -= 10
                     bullet.kill()
-        #display score to screen   
+        #display score to screen
         font = pygame.font.Font(pygame.font.match_font('arial'), 30)
         text_surface = font.render(str(player.score), True, 'white')
         text_rect = text_surface.get_rect()
         text_rect.midtop = (50,100)
         self.display.blit(text_surface, text_rect)
-             
-    
+
+    def boss_collision(self):
+        player = self.player.sprite
+        for enemy in self.enemies:
+            if enemy.className == 'boss':
+                if enemy.rect.colliderect(player.rect) and self.playerBossHit + 1000 < pygame.time.get_ticks():
+                    player.health -= 75
+                    self.playerBossHit = pygame.time.get_ticks()
+
     def redMan(self):
         redDead = True
         for enemy in self.enemies:
@@ -180,8 +191,8 @@ class Level:
                     item.kill()
                 if item.type == 'portal' and self.redManDead:
                     self.teleportPlayer = True
-                    
-                                      
+
+
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -208,26 +219,26 @@ class Level:
         gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
         scoreFont = pygame.font.Font('fonts/Barcade.otf', 60)
         gameContFont = pygame.font.Font('fonts/Barcade.otf', 50)
-        
+
         gameOver = gameOverFont.render('YOU DIED', True, 'white')
         gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
         finalScore = scoreFont.render(f'Your Score is {player.score}', True, 'yellow')
-        
+
         gameOverRect = gameOver.get_rect()
         gameContRect = gameCont.get_rect()
         finalScoreRect = finalScore.get_rect()
-        
+
         gameOverRect.midtop = (scrnW // 2, 200)
         gameContRect.midtop = (scrnW // 2, 450)
         finalScoreRect.midtop = (scrnW // 2, 350)
-        
-        
+
+
         if player.dead:
             self.display.blit(gameOver, gameOverRect)
             self.display.blit(finalScore, finalScoreRect)
             self.display.blit(gameCont, gameContRect)
-            
-            
+
+
 
     def drawBG(self):
         self.display.fill('black')
@@ -248,12 +259,12 @@ class Level:
             self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
             # self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
             self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
-    
-    
+
+
     # def boss_collision(self):
     #     if self.bossenemy.rect.collide_rect(self.player.rect):
-    #         self.player.health = self.player.health - 25   
-        
+    #         self.player.health = self.player.health - 25
+
     def run(self): # This is the part where everything is run - the same as the while loop in most one-page games
 
         # Level stuff
@@ -267,9 +278,6 @@ class Level:
         self.items.draw(self.display)
         self.pickupItem()
         self.items.update(self.scrollSpeed)
-        # for item in self.items.sprites():
-        #     if item.type == 'portal':
-        #         item.animate()
 
         # Enemy update
         self.enemies.draw(self.display)
@@ -284,15 +292,14 @@ class Level:
         self.bullets.draw(self.display)
         self.bullets.update(self.scrollSpeed)
         self.bulletHitsCharacter()
-        
-        
+
+
         for player in self.player:
             if player.shooting:
                 self.bullets.add(player.shoot())
         for enemy in self.enemies:
             if enemy.className != 'boss' and enemy.shooting:
                 self.bullets.add(enemy.shoot())
-
 
         # Player stuff
         if not self.playerDead:
@@ -302,7 +309,3 @@ class Level:
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
             self.checkDead()
-       
-
-   
-
