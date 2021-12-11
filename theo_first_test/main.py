@@ -30,8 +30,10 @@ def music(do, track):
     if do == 'Unpause':
         pygame.mixer.music.unpause()
 
+            
 
 def menu():
+    
     music('Play', 0)
     while True:
         surface = pygame.Surface((scrnW,scrnH))
@@ -42,17 +44,17 @@ def menu():
         surface.blit(background, (0,0))
         #main title
         main_font = pygame.font.SysFont("Calibri", 80)
-        text_surface = main_font.render('KILL THE BOSS', True, 'white')
+        text_surface = main_font.render('KILL THE BOSS', True, 'white') 
         scrn.blit(surface,(0,00))
         scrn.blit(text_surface,(200,100))
-
+        
         mo_x, mo_y = pygame.mouse.get_pos()
 
 
         #size of rectangle buttons and their coordinates
         small_font = pygame.font.SysFont("Verdana", 20)
 
-
+        
         #load images
         instruct = pygame.image.load('images/buttons/button1.png')
         start = pygame.image.load('images/buttons/button2.png')
@@ -124,7 +126,6 @@ def menu():
 
 # Button leads to new screen
 def instructions():
-
     running = True
     while running:
         mo_x, mo_y = pygame.mouse.get_pos()
@@ -143,7 +144,6 @@ def instructions():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if rect4.collidepoint((mo_x, mo_y)):
                     menu()
-               # if event.key == pygame.K_ESCAPE:
                     running = False
 
         pygame.display.update()

@@ -118,7 +118,6 @@ class Level:
                             
     def bulletHitsCharacter(self):
         player = self.player.sprite
-
         for bullet in self.bullets.sprites():
             if bullet.rect.colliderect(player.rect):
                 player.health -= 10
@@ -126,6 +125,8 @@ class Level:
                     player.health -= 10
                 bullet.kill()
             for enemy in self.enemies.sprites():
+                if bullet.rect.colliderect(enemy.rect) and enemy.dead:  #if bullet kills enemy
+                    player.score += 10 #increment score
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
                     enemy.health -= 10
                     if bullet.colour == LAVA:
@@ -133,6 +134,17 @@ class Level:
                     if bullet.colour == PURPLE:
                         enemy.health -= 10
                     bullet.kill()
+        #display score to screen   
+        font = pygame.font.Font(pygame.font.match_font('arial'), 18)
+        text_surface = font.render(str(player.score), True, 'white')
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (100,200)
+        self.display.blit(text_surface, text_rect)
+                    
+
+
+
+
 
     def pickupItem(self):
         player = self.player.sprite
@@ -231,7 +243,8 @@ class Level:
         self.bullets.draw(self.display)
         self.bullets.update(self.scrollSpeed)
         self.bulletHitsCharacter()
-
+        
+        
         for player in self.player:
             if player.shooting:
                 self.bullets.add(player.shoot())
@@ -247,3 +260,4 @@ class Level:
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
             self.checkDead()
+       
