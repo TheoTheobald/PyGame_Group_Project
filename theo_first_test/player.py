@@ -25,6 +25,7 @@ class Player(Character):
         self.totalHealth = 250
         self.health = 250
         self.score = 0 #set score to 0
+        self.highScore = 0
 
         # Player appearance
 
