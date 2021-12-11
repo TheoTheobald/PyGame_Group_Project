@@ -14,7 +14,7 @@ from player import Player
 from enemy import Enemy
 from bigEnemy import BigEnemy
 from bossenemy import BossEnemy
-from items import Item
+from items import Item, Portal
 
 class Level:
     def __init__(self, levelLayout, scrn):
@@ -28,6 +28,9 @@ class Level:
         self.playerDead = False
         self.scrollSpeed = 0
         self.scrollBG = 0
+        
+        self.redManDead = False
+        self.teleportPlayer = False
 
 
     def placeTiles(self, layout):
@@ -45,7 +48,7 @@ class Level:
                     player = Player(((x + tileSize/4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy((x, y+10))
+                    enemy = Enemy((x, y + 10))
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Item(((x + tileSize/5), y + 29), 'healthpack')
@@ -56,6 +59,9 @@ class Level:
                 elif cell == 'D':
                     dmgBoost = Item(((x + tileSize/5), y + 29), 'dmgBoost')
                     self.items.add(dmgBoost)
+                elif cell == 'Q':
+                    portal = Portal((x, y), 'portal')
+                    self.items.add(portal)
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 120))
                     self.enemies.add(boss)
@@ -140,11 +146,17 @@ class Level:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (100,200)
         self.display.blit(text_surface, text_rect)
-                    
-
-
-
-
+             
+    
+    def redMan(self):
+        redDead = True
+        for enemy in self.enemies:
+            if enemy.className == 'bigEnemy':
+                redDead = False
+            else:
+                pass
+        if redDead:
+            self.redManDead = True
 
     def pickupItem(self):
         player = self.player.sprite
@@ -164,7 +176,10 @@ class Level:
                 if item.type == 'dmgBoost':
                     player.bulletColour = PURPLE
                     item.kill()
-                        
+                if item.type == 'portal' and self.redManDead:
+                    self.teleportPlayer = True
+                    
+                                      
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -180,8 +195,8 @@ class Level:
                 if enemy.canShoot and not player.dead:  # Shooting range, height and cooldown
                     if player.rect.y > enemy.rect.y - enemy.image.get_height() and player.rect.y < enemy.rect.y + enemy.image.get_height():
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
-                            enemy.shooting = True
-                            enemy.timeLastShot = pygame.time.get_ticks()
+                            enemy.shooting = True # Allows the enemy to shoot
+                            enemy.timeLastShot = pygame.time.get_ticks() # Resets the shot timer
                 else:
                     enemy.shooting = False
 
@@ -196,8 +211,6 @@ class Level:
             music('Play', 0)
             self.display.blit(gameOver, (425, 300))
             self.display.blit(gameCont, (300, 450))
-            
-            
             
 
     def drawBG(self):
@@ -230,11 +243,15 @@ class Level:
         self.tiles.update(self.scrollSpeed)
         self.tiles.draw(self.display)
         self.scroll()
+        self.redMan()
 
         # Items
         self.items.draw(self.display)
         self.pickupItem()
         self.items.update(self.scrollSpeed)
+        # for item in self.items.sprites():
+        #     if item.type == 'portal':
+        #         item.animate()
 
         # Enemy update
         self.enemies.draw(self.display)

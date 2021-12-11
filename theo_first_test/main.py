@@ -173,6 +173,8 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if level.teleportPlayer == True:
+                level = Level(bossRoomLayout, scrn)
 
 
         scrn.fill('black')
