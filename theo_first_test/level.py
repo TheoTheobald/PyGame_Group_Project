@@ -65,7 +65,7 @@ class Level:
                     portal = Portal((x, y), 'portal')
                     self.items.add(portal)
                 elif cell == 'B':
-                    boss = BossEnemy((x - 60, y + 90))
+                    boss = BossEnemy((x - 60, y - 90))
                     self.enemies.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))

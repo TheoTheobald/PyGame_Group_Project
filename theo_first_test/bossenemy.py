@@ -24,6 +24,7 @@ class BossEnemy(Character):
         self.updateTime = pygame.time.get_ticks()
         self.value = 100
         self.stance = 0
+        self.getSprites(pos)
 
         #Creating variables for horizontal motion of boss
         self.speed = 6

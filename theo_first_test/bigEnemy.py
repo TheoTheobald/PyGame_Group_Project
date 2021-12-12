@@ -26,7 +26,7 @@ class BigEnemy(Character):
         self.totalHealth = 1000
         self.health = 1000
         self.bulletColour = LAVA
-        self.bulletCooldown = random.randint(700, 1500)
+        self.bulletCooldown = 1100
         self.bulletThickness = 100
         self.bulletSpeed = 5
         self.bulletOffsetXPlus = 100
