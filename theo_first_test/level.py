@@ -32,7 +32,7 @@ class Level:
         self.scrollBG = 0 # Background is not initially moving
         self.saveScoreCheck = 0
 
-        self.redManDead = True # Checks to see if pre-boss enemy is dead
+        self.redManDead = False # Checks to see if pre-boss enemy is dead
         self.teleportPlayer = False # True when the player is to be teleported
         self.gameComplete = False # True when the game has been completed
 
