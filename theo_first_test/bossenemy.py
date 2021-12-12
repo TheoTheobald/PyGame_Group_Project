@@ -14,7 +14,7 @@ from character import Character
 
 class BossEnemy(Character):
     className = 'boss'
-    
+
     def __init__(self, pos):
         super().__init__(pos)
         self.animations = []
@@ -26,38 +26,59 @@ class BossEnemy(Character):
         self.getSprites(pos)
         self.rect = self.image.get_rect(midbottom=pos)
         self.value = 100
-        
+        self.stance = 0
+
         #Creating variables for horizontal motion of boss
         self.speed = 6
         self.mean=False #This for ensuring that it does not stop at starting position after it comes right back again
         #Boss health
         self.totalHealth = 2000
         self.health = 2000
-        self.attackCooldown = 500
+        self.attackCooldown = 1000
 
     def getSprites(self, pos):
-        frames = len(os.listdir("images/boss"))
-        for i in range(frames):
-            img = pygame.image.load(f"images/boss/{i}.png")
-            img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
-            self.animations += [img]
+        animationTypes = ['Idle', 'Death']
+        for elem in animationTypes:
+            frames = len(os.listdir(f"images/boss/{elem}"))
+            lst = []
+            for i in range(frames):
+                img = pygame.image.load(f"images/boss/{elem}/{i}.png")
+                img = pygame.transform.scale(img, (int(img.get_width() * 2.5), int(img.get_height() * 2.5)))
+                lst += [img]
+            self.animations += [lst]
 
-        self.image = self.animations[self.frameIndex]
+        self.image = self.animations[self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft=pos)
 
     def animate(self):
         timeGap = 100  # Time waited before resetting image
-        self.image = self.animations[self.frameIndex]  # Update image to match current frame
+        self.image = self.animations[self.stance][self.frameIndex]  # Update image to match current frame
         if pygame.time.get_ticks() - self.updateTime > timeGap:  # If time since last update has reached timeGap
             self.updateTime = pygame.time.get_ticks()  # Update time since last update to current time
             self.frameIndex += 1  # Move frame forward 1
-        if self.frameIndex >= len(self.animations):
+        if self.frameIndex >= len(self.animations[self.stance]):
+            if self.stance == 1:
+                self.kill()
             self.frameIndex = 0
 
     def healthBar(self, scrn):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 120, 5))
         pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health/self.totalHealth)), 5))
-            
+
+    def horizontalMotion(self):
+        if not self.dead:
+            if not (self.mean):
+                self.rect.x -= self.speed
+                if self.rect.left < 0:
+                    self.speed = random.randint(6, 16)
+                    self.mean = True
+            else:
+                self.rect.x += self.speed
+                if self.rect.x > scrnW - self.image.get_width():
+                    self.speed = random.randint(6, 16)
+                    self.mean = False
+
+
     def update(self, xShift):
         self.rect.x += xShift
         self.animate()
@@ -77,4 +98,3 @@ class BossEnemy(Character):
                 pygame.mixer.Channel(0).play(bossMove)
                 self.speed = random.randint(10, 20)
                 self.mean = False
-

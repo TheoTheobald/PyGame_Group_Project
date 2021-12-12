@@ -24,17 +24,6 @@ icon = pygame.image.load('images/icon/icon.png')
 icon = pygame.transform.scale(icon, (32,32))
 pygame.display.set_icon(icon)
 
-# def music(do, track):  
-#     if do == 'Play':
-#    # add music from https://freemusicarchive.org/
-#         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-#         pygame.mixer.music.play(loops=-1)
-#     if do == 'Pause':
-#         pygame.mixer.music.pause()
-#     if do == 'Unpause':
-#         pygame.mixer.music.unpause()
-
-
 
 def menu():
     global level
@@ -117,7 +106,7 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-                    
+
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True
@@ -137,24 +126,25 @@ def instructions():
     while True:
         mo_x, mo_y = pygame.mouse.get_pos()
        # scrn.fill(('white'))
-        
-       
+
+
         bg = pygame.image.load('images/background/inst_bg.png')
         bg.convert()
         bg = pygame.transform.scale(bg, (int(bg.get_width() * 1.35), int(bg.get_height() * 1.55)))
         rect6 = bg.get_rect()
         rect6.topleft = (0,50)
         scrn.blit(bg, rect6)
-        
+
+        # stating points value of each enemy
+
+
         back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()
         rect4.topleft = (5,60)
         scrn.blit(back, rect4)
-        
 
-        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -174,7 +164,7 @@ def game():
 
     if not isMuted:
         music('Play', 1)
-        soundFX(1)  
+        soundFX(1)
     elif isMuted:
         music('Pause', 1)
         soundFX(0)
@@ -184,7 +174,7 @@ def game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     menu()
-                if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
+                if event.key == pygame.K_RETURN and (level.player.sprite.dead == True or level.gameComplete == True):
                     level = Level(levelLayout, scrn)
                     menu()
             if event.type == pygame.QUIT:
