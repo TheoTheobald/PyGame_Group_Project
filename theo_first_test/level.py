@@ -135,9 +135,14 @@ class Level:
             for enemy in self.enemies.sprites():
 
                 if enemy.dead and not enemy.scoreGiven:  # if bullet kills enemy
+                    if enemy.className == 'bigEnemy':
+                        bigEnemyDead.play()
+                    else:
+                        enemyHit.play()
                     player.score += enemy.value  # increment score
                     enemy.scoreGiven = True
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
+
                     enemy.health -= 10
                     if bullet.colour == LAVA:
                         enemy.health -= 5
@@ -175,6 +180,7 @@ class Level:
         for item in self.items.sprites():
             if item.rect.colliderect(player.rect):
                 if item.type == 'healthpack':
+                    getItem.play()
                     if player.health == player.totalHealth:
                         return
                     player.health += 150
@@ -182,12 +188,15 @@ class Level:
                         player.health = player.totalHealth
                     item.kill()
                 if item.type == 'jumpBoost':
+                    getItem.play()
                     player.jumpSpeed -= 6
                     item.kill()
                 if item.type == 'dmgBoost':
+                    getItem.play()
                     player.bulletColour = PURPLE
                     item.kill()
                 if item.type == 'portal' and self.redManDead:
+                    portal.play()
                     self.teleportPlayer = True
 
     def checkPlayerPos(self):
@@ -208,6 +217,10 @@ class Level:
                         if player.rect.x > enemy.rect.x - 500 and player.rect.x < enemy.rect.x + 500:
                             enemy.shooting = True  # Allows the enemy to shoot
                             enemy.timeLastShot = pygame.time.get_ticks()  # Resets the shot timer
+                            if enemy.className == 'bigEnemy':
+                                bigEnemyGrowl.play()
+                            else:
+                                enemyGun.play()
                 else:
                     enemy.shooting = False
 

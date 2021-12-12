@@ -17,13 +17,14 @@ bg = pygame.image.load('images/background/5.png')
 isMuted = False
 
 
+
 pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
 icon = pygame.image.load('images/icon/icon.png')
 icon = pygame.transform.scale(icon, (32,32))
 pygame.display.set_icon(icon)
 
-# def music(do, track):
+# def music(do, track):  
 #     if do == 'Play':
 #    # add music from https://freemusicarchive.org/
 #         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
@@ -173,17 +174,15 @@ def game():
 
     if not isMuted:
         music('Play', 1)
-        # isMuted = True
+        soundFX(1)  
     elif isMuted:
         music('Pause', 1)
-        # isMuted = False
-
+        soundFX(0)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    # pygame.mixer.music.stop()
                     menu()
                 if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
                     level = Level(levelLayout, scrn)

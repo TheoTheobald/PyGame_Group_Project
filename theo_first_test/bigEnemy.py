@@ -25,7 +25,7 @@ class BigEnemy(Character):
         self.getSprites(pos)
 
         self.totalHealth = 1000
-        self.health = 1000
+        self.health = 5
         self.bulletColour = LAVA
         self.bulletCooldown = random.randint(700, 1500)
         self.bulletThickness = 100

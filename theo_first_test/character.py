@@ -97,6 +97,7 @@ class Character(pygame.sprite.Sprite):
             self.falling = True
             self.frameIndex = 0
             self.stance = 2
+            playerJump.play()
 
     def die(self):
         if self.health <= 0:

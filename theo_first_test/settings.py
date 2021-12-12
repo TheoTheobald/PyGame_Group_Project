@@ -8,6 +8,7 @@ General settings file for game
 """
 
 import pygame
+from pygame import mixer
 
 levelLayout = ['989888999988989998898_________________________8989898999898___________',
                 '____£___D_____________________E_______E________________E_J£___________',
@@ -51,16 +52,37 @@ RED = pygame.Color(255, 0, 0)
 PURPLE = pygame.Color(200, 0, 255)
 LAVA = pygame.Color(207, 16, 32)
 
+
 # sound effects
-# playerGun = pygame.
+pygame.mixer.init()
+playerGun = pygame.mixer.Sound('sound/gun.wav')
+playerJump = pygame.mixer.Sound('sound/jump.wav')
+enemyGun = pygame.mixer.Sound('sound/gun1.wav')
+bigEnemyGrowl = pygame.mixer.Sound('sound/growl.wav')
+bigEnemyDead = pygame.mixer.Sound('sound/deathgrowl.wav')
+enemyHit = pygame.mixer.Sound('sound/hit.wav')
+portal = pygame.mixer.Sound('sound/portal.wav')
+getItem = pygame.mixer.Sound('sound/getitem.wav')
+
+def soundFX(volume):
+    playerGun.set_volume(volume)
+    playerJump.set_volume(volume)
+    enemyGun.set_volume(volume)
+    bigEnemyGrowl.set_volume(volume)
+    bigEnemyDead.set_volume(volume)
+    enemyHit.set_volume(volume)
+    portal.set_volume(volume)
+    getItem.set_volume(volume)
+
 
 def music(do, track):
     if do == 'Play':
    # add music from https://freemusicarchive.org/
         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(loops=-1)
     if do == 'Pause':
         pygame.mixer.music.pause()
     if do == 'Unpause':
         pygame.mixer.music.unpause()
+
