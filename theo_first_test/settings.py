@@ -83,8 +83,7 @@ def soundFX(volume):
 
 def music(do, track): # Starts, pauses, or unpauses a given track
     if do == 'Play':
-   # add music from https://freemusicarchive.org/
-        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+        pygame.mixer.music.load(f"music/bgm{track}.mp3") 
         pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(loops=-1)
     if do == 'Pause':
