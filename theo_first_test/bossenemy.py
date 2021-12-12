@@ -9,7 +9,7 @@ Boss Enemy
 import pygame, os, random
 from settings import *
 from character import Character
-from random import randomint
+#from random import randomint
 
 
 class BossEnemy(Character):
