@@ -8,7 +8,7 @@ General settings file for game
 """
 
 import pygame
-from pygame import mixer
+from pygame import mixer # Level layout is defined by a list of strings, each character of which corresponds to a tile, character, or item
 
 levelLayout = ['989888999988989998898_________________________8989898999898___________',
                 '____£___D_____________________E_______E_______8________E_J£___________',
@@ -20,8 +20,8 @@ levelLayout = ['989888999988989998898_________________________8989898999898_____
                 '_____________________E______8___________________________9_____________',
                 '_________E_£_______5316_____9___________________E__£______________Q___',
                 '________5316_______________E9£__________________5326__________________',
-                '_____£___________£_________£8£________________________E_9£____________',
-                '____££________E_££_______EH£7£________S_______£E_____5268£_______££___',
+                '_____£___________£_________£8£_______________£________E_9£____________',
+                '____££________E_££_______EH£7£________S______£_E_____5268£_______££___',
                 '0323232131231322132123123313132132131231323123121231313131132212132124',]
 
 
@@ -81,7 +81,7 @@ def soundFX(volume):
     bossHit.set_volume(volume)
 
 
-def music(do, track):
+def music(do, track): # Starts, pauses, or unpauses a given track
     if do == 'Play':
    # add music from https://freemusicarchive.org/
         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker

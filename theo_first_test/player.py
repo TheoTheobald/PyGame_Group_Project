@@ -17,7 +17,7 @@ class Player(Character):
 
     def __init__(self, pos):
         super().__init__(pos)
-        self.cont = False
+        self.falling = False # Player is not falling - can jump
 
         # Player combat
         self.bulletCooldown = 200
@@ -71,8 +71,7 @@ class Player(Character):
                 self.timeLastShot = pygame.time.get_ticks()
             else:
                 self.shooting = False
-        else:
-            self.cont = True
+                
 
     def update(self, xShift):
         super().update(xShift)

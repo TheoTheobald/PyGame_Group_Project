@@ -14,7 +14,7 @@ class Tile(pygame.sprite.Sprite):
     className = 'tile'
     def __init__(self, pos, size, tType):
         super().__init__()
-        img = pygame.image.load(f"images/tile/{tType}.png")
+        img = pygame.image.load(f"images/tile/{tType}.png") # Gets tile image based on passed parameter
         self.image = pygame.transform.scale(img, (tileSize, tileSize))
         self.rect = self.image.get_rect(topleft = pos)
         

@@ -10,7 +10,7 @@ Projectiles
 import pygame
 
 class Projectile(pygame.sprite.Sprite):
-    def __init__(self, x, y, thickness, colour, direction, speed):
+    def __init__(self, x, y, thickness, colour, direction, speed): # This is all pretty self explanatory
         super().__init__()
         self.colour = colour
         self.image = pygame.Surface((10, thickness))
@@ -19,6 +19,6 @@ class Projectile(pygame.sprite.Sprite):
         self.direction = direction
         self.velocity = speed * direction
             
-    def update(self, xShift):
+    def update(self, xShift): # Moves the bullet in the desired direction, taking into account scroll speed
         self.rect.x += self.velocity + xShift
         

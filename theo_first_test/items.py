@@ -13,7 +13,7 @@ class Item(pygame.sprite.Sprite):
     def __init__(self, pos, itemType):
         super().__init__()
         self.pos = pos
-        self.type = itemType
+        self.type = itemType # Used to find out what type of item it is
         self.image = pygame.image.load(f"images/items/{self.type}.png")
         self.rect = self.image.get_rect(topleft = self.pos)
     

@@ -22,22 +22,19 @@ class BossEnemy(Character):
         self.frameIndex = 0
         self.facing = 0
         self.updateTime = pygame.time.get_ticks()
-        self.timeLastAttacked = pygame.time.get_ticks()
-        self.getSprites(pos)
-        self.rect = self.image.get_rect(midbottom=pos)
         self.value = 100
         self.stance = 0
 
         #Creating variables for horizontal motion of boss
         self.speed = 6
-        self.mean=False #This for ensuring that it does not stop at starting position after it comes right back again
+        self.mean = False #This for ensuring that it does not stop at starting position after it comes right back again
         #Boss health
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 1000
 
-    def getSprites(self, pos):
-        animationTypes = ['Idle', 'Death']
+    def getSprites(self, pos): # Not ideal to have these functions repeated but since there were different stances and the boss doesn't face a direction
+        animationTypes = ['Idle', 'Death'] # it was difficult to factorise out just the common components of the function
         for elem in animationTypes:
             frames = len(os.listdir(f"images/boss/{elem}"))
             lst = []
@@ -65,17 +62,17 @@ class BossEnemy(Character):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 120, 5))
         pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health/self.totalHealth)), 5))
 
-    def horizontalMotion(self):
-        if not self.dead:
+    def horizontalMotion(self): # Governs the bosses movement
+        if not self.dead: # Stops movement when dead
             if not (self.mean):
                 self.rect.x -= self.speed
-                if self.rect.left < 0:
+                if self.rect.left < 0: # If on left hand side of the wall - change direction and randomise speed
                     pygame.mixer.Channel(1).play(bossMove2)
                     self.speed = random.randint(6, 16)
                     self.mean = True
             else:
                 self.rect.x += self.speed
-                if self.rect.x > scrnW - self.image.get_width():
+                if self.rect.x > scrnW - self.image.get_width(): # If on right hand side of the wall - change direction and randomise speed
                     pygame.mixer.Channel(0).play(bossMove)
                     self.speed = random.randint(6, 16)
                     self.mean = False
