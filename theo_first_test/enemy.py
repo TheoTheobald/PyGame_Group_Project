@@ -20,7 +20,6 @@ class Enemy(Character):
         self.value = 5
         self.health = 60
         # self.hasSpace = self.checkHasSpace()
-        self.getSprites(pos)
         
                             #Attempted to introduce basic enemy movement
     # def checkHasSpace(self):

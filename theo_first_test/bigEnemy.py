@@ -22,7 +22,6 @@ class BigEnemy(Character):
         self.frameIndex = 0
         self.updateTime = pygame.time.get_ticks()
         self.timeLastShot = pygame.time.get_ticks()
-        self.getSprites(pos)
 
         self.totalHealth = 1000
         self.health = 1000

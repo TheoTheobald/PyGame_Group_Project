@@ -171,20 +171,20 @@ def game():
 
     while True:
         for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
+            if event.type == pygame.KEYDOWN: # If escape is pressed, return to menu
                 if event.key == pygame.K_ESCAPE:
                     menu()
                 if event.key == pygame.K_RETURN and (level.player.sprite.dead == True or level.gameComplete == True):
-                    level = Level(levelLayout, scrn)
+                    level = Level(levelLayout, scrn) # If game is over, return to menu when enter is pressed
                     menu()
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT: # If game is closed, close
                 pygame.quit()
                 sys.exit()
-            if level.teleportPlayer == True:
+            if level.teleportPlayer == True: # When player touches portal and has killed red dude, rebuilt level to boss room
                 player = level.player.sprite
                 level = Level(bossLayout, scrn)
-                player.rect = level.player.sprite.rect
-                level.player.sprite = player
+                player.rect = level.player.sprite.rect # Player assigned to temp variable so that data is not lost
+                level.player.sprite = player # Everything about old player barring position is retained
                 music('Play', 2)
 
 
