@@ -150,10 +150,10 @@ class Level:
                         enemy.health -= 10
                     bullet.kill()
         # display score to screen
-        font = pygame.font.Font(pygame.font.match_font('arial'), 30)
-        text_surface = font.render(str(player.score), True, 'white')
+        font = pygame.font.Font('fonts/BarcadeNB.otf', 30)
+        text_surface = font.render(f"SCORE {player.score}", True, 'white')
         text_rect = text_surface.get_rect()
-        text_rect.midtop = (50, 100)
+        text_rect.topleft = (50, 50)
         self.display.blit(text_surface, text_rect)
 
     def boss_collision(self):
@@ -228,7 +228,7 @@ class Level:
         player = self.player.sprite
         gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
         scoreFont = pygame.font.Font('fonts/Barcade.otf', 60)
-        gameContFont = pygame.font.Font('fonts/Barcade.otf', 50)
+        gameContFont = pygame.font.Font('fonts/BarcadeNB.otf', 40)
 
         gameOver = gameOverFont.render('YOU DIED', True, 'white')
         gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
@@ -239,7 +239,7 @@ class Level:
         finalScoreRect = finalScore.get_rect()
 
         gameOverRect.midtop = (scrnW // 2, 200)
-        gameContRect.midtop = (scrnW // 2, 450)
+        gameContRect.midtop = (scrnW // 2, 550)
         finalScoreRect.midtop = (scrnW // 2, 350)
 
         if player.dead:
@@ -257,7 +257,7 @@ class Level:
 
             highScoreDisplay = scoreFont.render(f"High score : {player.highScore}", True, "white")
             highScoreRect = highScoreDisplay.get_rect()
-            highScoreRect.midtop = (scrnW // 2, 550)
+            highScoreRect.midtop = (scrnW // 2, 450)
 
             self.display.blit(gameOver, gameOverRect)
             self.display.blit(finalScore, finalScoreRect)
