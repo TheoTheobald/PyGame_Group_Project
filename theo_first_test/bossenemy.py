@@ -28,7 +28,7 @@ class BossEnemy(Character):
         self.value = 100
         
         #Creating variables for horizontal motion of boss
-        self.speed = 2
+        self.speed = 6
         self.mean=False #This for ensuring that
         self.time_boss_motion=200
 
