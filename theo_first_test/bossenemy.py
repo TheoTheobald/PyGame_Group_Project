@@ -25,15 +25,12 @@ class BossEnemy(Character):
         self.timeLastAttacked = pygame.time.get_ticks()
         self.getSprites(pos)
         self.rect = self.image.get_rect(midbottom=pos)
+        self.value = 100
+        
         #Creating variables for horizontal motion of boss
-        self.speed = 2
-        self.mean=False #This for ensuring that
-        self.criteria=False #This will ensure that boss returns back to orginal starting position
-        self.motion_1=True
-        self.motion_2=False #To initiate second type of horizontal motion
-        self.motion_3=False #To initiate third type of horizontal motion
-        self.time_boss_motion=200
-
+        self.speed = 6
+        self.mean=False #This for ensuring that it does not stop at starting position after it comes right back again
+        #Boss health
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 500
@@ -65,19 +62,17 @@ class BossEnemy(Character):
         self.rect.x += xShift
         self.animate()
         self.horizontal_motion()
+        self.die()
 
     def horizontal_motion(self):
         if not (self.mean):
-            # if self.rect.midbottom == self.pos and self.criteria:
-            #     return
             self.rect.x -= self.speed
             if self.rect.left < 0:
-                self.speed = random.randint(5, 18)
+                self.speed = random.randint(10, 20)
                 self.mean = True
         else:
             self.rect.x += self.speed
-            if self.rect.x > scrnW - 150:
-                self.speed = random.randint(5, 18)
+            if self.rect.x > scrnW - self.image.get_width():
+                self.speed = random.randint(10, 20)
                 self.mean = False
-                # self.criteria = True
 

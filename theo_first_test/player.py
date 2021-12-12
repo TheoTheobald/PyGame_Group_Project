@@ -17,7 +17,6 @@ class Player(Character):
 
     def __init__(self, pos):
         super().__init__(pos)
-        self.canTeleport = False
         self.cont = False
 
         # Player combat
@@ -26,6 +25,7 @@ class Player(Character):
         self.totalHealth = 250
         self.health = 250
         self.score = 0 #set score to 0
+        self.highScore = 0
 
         # Player appearance
 
@@ -60,6 +60,7 @@ class Player(Character):
 
             if keys[pygame.K_SPACE] and self.canShoot:
                 self.shooting = True
+                pygame.mixer.Channel(6).play(playerGun)
                 self.timeLastShot = pygame.time.get_ticks()
             else:
                 self.shooting = False

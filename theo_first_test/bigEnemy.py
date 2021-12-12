@@ -6,7 +6,7 @@ Big Enemy
 
 @author: saree
 """
-import pygame, os
+import pygame, os, random
 from character import Character
 from settings import *
 
@@ -27,7 +27,7 @@ class BigEnemy(Character):
         self.totalHealth = 1000
         self.health = 1000
         self.bulletColour = LAVA
-        self.bulletCooldown = 1100
+        self.bulletCooldown = random.randint(700, 1500)
         self.bulletThickness = 100
         self.bulletSpeed = 5
         self.bulletOffsetXPlus = 100

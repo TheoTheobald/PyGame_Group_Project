@@ -8,6 +8,7 @@ General settings file for game
 """
 
 import pygame
+from pygame import mixer
 
 levelLayout = ['989888999988989998898_________________________8989898999898___________',
                 '____£___D_____________________E_______E________________E_J£___________',
@@ -18,9 +19,9 @@ levelLayout = ['989888999988989998898_________________________8989898999898_____
                 '__5126_________5236__________________________________5269_____________',
                 '_____________________E______8___________________________9_____________',
                 '_________E_£_______5316_____9___________________E__£______________Q___',
-                '_____Q__5316_______________E9£__________________5326__________________',
+                '________5316_______________E9£__________________5326__________________',
                 '_____£___________£_________£8£________________________E_9£____________',
-                'DJ__££________E_££_______EH£7£________S_______£E_____5268£_______££___',
+                '____££________E_££_______EH£7£________S_______£E_____5268£_______££___',
                 '0323232131231322132123123313132132131231323123121231313131132212132124',]
 
 
@@ -44,7 +45,6 @@ bossLayout = ['____________________',
 tileSize = 64
 scrnW = 1280
 scrnH = tileSize * len(levelLayout)
-levelLength = len(levelLayout[0])
 
 # Colours
 GREEN = pygame.Color(0, 255, 0)
@@ -53,12 +53,36 @@ PURPLE = pygame.Color(200, 0, 255)
 LAVA = pygame.Color(207, 16, 32)
 
 
+# sound effects
+pygame.mixer.init()
+playerGun = pygame.mixer.Sound('sound/gun.wav')
+playerJump = pygame.mixer.Sound('sound/jump.wav')
+enemyGun = pygame.mixer.Sound('sound/gun1.wav')
+bigEnemyGrowl = pygame.mixer.Sound('sound/growl.wav')
+bigEnemyDead = pygame.mixer.Sound('sound/deathgrowl.wav')
+enemyHit = pygame.mixer.Sound('sound/hit.wav')
+portal = pygame.mixer.Sound('sound/portal.wav')
+getItem = pygame.mixer.Sound('sound/getitem.wav')
+
+def soundFX(volume):
+    playerGun.set_volume(volume)
+    playerJump.set_volume(volume)
+    enemyGun.set_volume(volume)
+    bigEnemyGrowl.set_volume(volume)
+    bigEnemyDead.set_volume(volume)
+    enemyHit.set_volume(volume)
+    portal.set_volume(volume)
+    getItem.set_volume(volume)
+
+
 def music(do, track):
     if do == 'Play':
    # add music from https://freemusicarchive.org/
         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+        pygame.mixer.music.set_volume(0.2)
         pygame.mixer.music.play(loops=-1)
     if do == 'Pause':
         pygame.mixer.music.pause()
     if do == 'Unpause':
         pygame.mixer.music.unpause()
+

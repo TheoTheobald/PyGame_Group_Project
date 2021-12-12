@@ -17,24 +17,31 @@ bg = pygame.image.load('images/background/5.png')
 isMuted = False
 
 
+
 pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
+icon = pygame.image.load('images/icon/icon.png')
+icon = pygame.transform.scale(icon, (32,32))
+pygame.display.set_icon(icon)
 
-def music(do, track):
-    if do == 'Play':
-   # add music from https://freemusicarchive.org/
-        pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-        pygame.mixer.music.play(loops=-1)
-    if do == 'Pause':
-        pygame.mixer.music.pause()
-    if do == 'Unpause':
-        pygame.mixer.music.unpause()
+# def music(do, track):
+#     if do == 'Play':
+#    # add music from https://freemusicarchive.org/
+#         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
+#         pygame.mixer.music.play(loops=-1)
+#     if do == 'Pause':
+#         pygame.mixer.music.pause()
+#     if do == 'Unpause':
+#         pygame.mixer.music.unpause()
 
 
 
 def menu():
+    global level
+    global isMuted
 
-    music('Play', 0)
+    if not isMuted:
+        music('Play', 0)
     while True:
         surface = pygame.Surface((scrnW,scrnH))
 
@@ -110,7 +117,7 @@ def menu():
                     sys.exit()
                 if rect5.collidepoint((mo_x, mo_y)):
                     #boolean
-                    global isMuted
+
                     if not isMuted:
                         music('Pause', 0)
                         isMuted = True
@@ -130,27 +137,27 @@ def instructions():
     while True:
         mo_x, mo_y = pygame.mouse.get_pos()
        # scrn.fill(('white'))
-        
-       
+
+
         bg = pygame.image.load('images/background/inst_bg.png')
         bg.convert()
         bg = pygame.transform.scale(bg, (int(bg.get_width() * 1.35), int(bg.get_height() * 1.55)))
         rect6 = bg.get_rect()
         rect6.topleft = (0,50)
         scrn.blit(bg, rect6)
-        
+
         # stating points value of each enemy
-        
-        
+
+
         back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
         rect4 = back.get_rect()
         rect4.topleft = (5,60)
         scrn.blit(back, rect4)
-        
 
-        
+
+
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -170,17 +177,15 @@ def game():
 
     if not isMuted:
         music('Play', 1)
-        # isMuted = True
+        soundFX(1)
     elif isMuted:
         music('Pause', 1)
-        # isMuted = False
-
+        soundFX(0)
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    # pygame.mixer.music.stop()
                     menu()
                 if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
                     level = Level(levelLayout, scrn)
@@ -188,6 +193,12 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if level.teleportPlayer == True:
+                player = level.player.sprite
+                level = Level(bossLayout, scrn)
+                player.rect = level.player.sprite.rect
+                level.player.sprite = player
+                music('Play', 2)
 
 
         scrn.fill('black')
