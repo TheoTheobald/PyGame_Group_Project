@@ -28,6 +28,15 @@ class Player(Character):
         self.highScore = 0
 
         # Player appearance
+        
+
+    def jump(self): # Allows the player to jump
+        if not self.falling:
+            self.direction.y += self.jumpSpeed
+            self.falling = True
+            self.frameIndex = 0
+            self.stance = 2
+            pygame.mixer.Channel(7).play(playerJump)
 
     def getInput(self):
         keys = pygame.key.get_pressed()
@@ -40,8 +49,6 @@ class Player(Character):
 
             if keys[pygame.K_RIGHT] and not keys[pygame.K_LEFT]:
                 self.facing = 0
-                # if self.direction.x:
-                #     self.rect.x += 1
                 self.direction.x = 1
                 self.stance = 1
 

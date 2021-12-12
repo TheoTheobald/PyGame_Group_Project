@@ -11,7 +11,7 @@ import pygame
 from pygame import mixer
 
 levelLayout = ['989888999988989998898_________________________8989898999898___________',
-                '____£___D_____________________E_______E________________E_J£___________',
+                '____£___D_____________________E_______E_______8________E_J£___________',
                 '____£__536_________E£_______5316______£______________513236___________',
                 '____£_________E___5326______9______5316_______£E_E______9_____________',
                 '____£________516__________£_8_________________512136____9_____________',
@@ -63,6 +63,9 @@ bigEnemyDead = pygame.mixer.Sound('sound/deathgrowl.wav')
 enemyHit = pygame.mixer.Sound('sound/hit.wav')
 portal = pygame.mixer.Sound('sound/portal.wav')
 getItem = pygame.mixer.Sound('sound/getitem.wav')
+bossMove = pygame.mixer.Sound('sound/bossmove.wav')
+bossMove2 = pygame.mixer.Sound('sound/bossmove2.wav')
+bossHit = pygame.mixer.Sound(('sound/bosshit.wav'))
 
 def soundFX(volume):
     playerGun.set_volume(volume)
@@ -73,6 +76,9 @@ def soundFX(volume):
     enemyHit.set_volume(volume)
     portal.set_volume(volume)
     getItem.set_volume(volume)
+    bossMove.set_volume(volume)
+    bossMove2.set_volume(volume)
+    bossHit.set_volume(volume)
 
 
 def music(do, track):

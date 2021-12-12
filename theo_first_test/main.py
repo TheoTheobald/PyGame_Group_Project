@@ -24,17 +24,6 @@ icon = pygame.image.load('images/icon/icon.png')
 icon = pygame.transform.scale(icon, (32,32))
 pygame.display.set_icon(icon)
 
-# def music(do, track):
-#     if do == 'Play':
-#    # add music from https://freemusicarchive.org/
-#         pygame.mixer.music.load(f"music/bgm{track}.mp3") # Defrini - The Chonker
-#         pygame.mixer.music.play(loops=-1)
-#     if do == 'Pause':
-#         pygame.mixer.music.pause()
-#     if do == 'Unpause':
-#         pygame.mixer.music.unpause()
-
-
 
 def menu():
     global level
@@ -157,8 +146,6 @@ def instructions():
         scrn.blit(back, rect4)
 
 
-
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -187,7 +174,7 @@ def game():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     menu()
-                if event.key == pygame.K_RETURN and level.player.sprite.dead == True:
+                if event.key == pygame.K_RETURN and (level.player.sprite.dead == True or level.gameComplete == True):
                     level = Level(levelLayout, scrn)
                     menu()
             if event.type == pygame.QUIT:

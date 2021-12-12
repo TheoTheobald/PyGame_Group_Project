@@ -32,8 +32,9 @@ class Level:
         self.scrollBG = 0
         self.saveScoreCheck = 0
 
-        self.redManDead = True
+        self.redManDead = False
         self.teleportPlayer = False
+        self.gameComplete = False
 
         self.playerBossHit = pygame.time.get_ticks()
 
@@ -156,11 +157,12 @@ class Level:
         text_rect.topleft = (50, 50)
         self.display.blit(text_surface, text_rect)
 
-    def boss_collision(self):
+    def bossCollision(self):
         player = self.player.sprite
         for enemy in self.enemies:
             if enemy.className == 'boss':
-                if enemy.rect.colliderect(player.rect) and self.playerBossHit + 1000 < pygame.time.get_ticks():
+                if enemy.rect.colliderect(player.rect) and self.playerBossHit + enemy.attackCooldown < pygame.time.get_ticks():
+                    pygame.mixer.Channel(2).play(bossHit)
                     player.health -= 75
                     self.playerBossHit = pygame.time.get_ticks()
 
@@ -195,9 +197,16 @@ class Level:
                     pygame.mixer.Channel(2).play(getItem)
                     player.bulletColour = PURPLE
                     item.kill()
-                if item.type == 'portal' and self.redManDead:
+                if item.type == 'portal':
                     pygame.mixer.Channel(3).play(portal)
-                    self.teleportPlayer = True
+                    if self.redManDead:
+                        self.teleportPlayer = True
+                    else:
+                        redDudePromptFont = pygame.font.Font('fonts/BarcadeNB.otf', 30)
+                        redDudePrompt = redDudePromptFont.render('I should kill that red thing..', True, 'white')
+                        redDudePromptRect = redDudePrompt.get_rect()
+                        redDudePromptRect.midtop = (scrnW // 2, 300)
+                        self.display.blit(redDudePrompt, redDudePromptRect)
 
     def checkPlayerPos(self):
         player = self.player.sprite
@@ -224,25 +233,28 @@ class Level:
                 else:
                     enemy.shooting = False
 
-    def checkDead(self):
+    def checkDeadOrComplete(self):
         player = self.player.sprite
         gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
         scoreFont = pygame.font.Font('fonts/Barcade.otf', 60)
         gameContFont = pygame.font.Font('fonts/BarcadeNB.otf', 40)
 
         gameOver = gameOverFont.render('YOU DIED', True, 'white')
+        gameComp = gameOverFont.render('YOU KILLED THE BOSS', True, 'white')
         gameCont = gameContFont.render('PRESS ENTER TO CONTINUE', True, 'white')
         finalScore = scoreFont.render(f'Your Score is {player.score}', True, 'yellow')
 
         gameOverRect = gameOver.get_rect()
+        gameCompRect = gameComp.get_rect()
         gameContRect = gameCont.get_rect()
         finalScoreRect = finalScore.get_rect()
 
         gameOverRect.midtop = (scrnW // 2, 200)
+        gameCompRect.midtop = (scrnW // 2, 200)
         gameContRect.midtop = (scrnW // 2, 550)
         finalScoreRect.midtop = (scrnW // 2, 350)
 
-        if player.dead:
+        if player.dead or self.gameComplete:
             # save score
             if self.saveScoreCheck < 1:
                 # append score to file
@@ -259,10 +271,14 @@ class Level:
             highScoreRect = highScoreDisplay.get_rect()
             highScoreRect.midtop = (scrnW // 2, 450)
 
-            self.display.blit(gameOver, gameOverRect)
+            if player.dead:
+                self.display.blit(gameOver, gameOverRect)
+            else:
+                self.display.blit(gameComp, gameCompRect)
             self.display.blit(finalScore, finalScoreRect)
             self.display.blit(highScoreDisplay,highScoreRect)
             self.display.blit(gameCont, gameContRect)
+
 
     def drawBG(self):
         self.display.fill('black')
@@ -273,16 +289,23 @@ class Level:
         bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
         bg3 = pygame.image.load('images/background/3.png')
         bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
-        # bg4 = pygame.image.load('images/background/4.png')
-        # bg4 = pygame.transform.scale(bg4, (scrnW * 1.5, 768))
         bg5 = pygame.image.load('images/background/5.png')
         bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
         for x in range(5):
             self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
             self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))
             self.display.blit(bg3, ((x * bg3.get_width() - 100) - self.scrollBG * 0.6, 0))
-            # self.display.blit(bg4, ((x * bg4.get_width() - 100) - self.scrollBG * 0.7, 0))
             self.display.blit(bg5, ((x * bg2.get_width() - 100) - self.scrollBG * 0.8, 0))
+
+    def checkComplete(self):
+        if self.levelLength < 30:
+            bossDead = True
+            for enemy in self.enemies:
+                if enemy.className == 'boss':
+                    bossDead = False
+            if bossDead == True:
+                self.gameComplete = True
+
 
     def run(self):  # This is the part where everything is run - the same as the while loop in most one-page games
 
@@ -292,6 +315,7 @@ class Level:
         self.tiles.draw(self.display)
         self.scroll()
         self.redMan()
+        self.checkComplete()
 
         # Items
         self.items.draw(self.display)
@@ -302,7 +326,7 @@ class Level:
         self.enemies.draw(self.display)
         self.enemies.update(self.scrollSpeed)
         self.checkPlayerPos()
-        self.boss_collision()
+        self.bossCollision()
 
         for enemy in self.enemies:
             enemy.healthBar(self.display)
@@ -326,6 +350,4 @@ class Level:
             self.collisionY()
             self.player.draw(self.display)
             self.player.sprite.healthBar(self.display)
-            self.checkDead()
-
-
+            self.checkDeadOrComplete()

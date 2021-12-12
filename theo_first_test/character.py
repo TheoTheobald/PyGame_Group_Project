@@ -37,7 +37,7 @@ class Character(pygame.sprite.Sprite):
         self.gravity = 1
         self.jumpSpeed = -18
 
-    def getSprites(self, pos):
+    def getSprites(self, pos): # Creates a 3D array of images for the enemy and playable characters
         rightLeft = ['right', 'left']
         animationTypes = ['Idle', 'Run', 'Jump', 'Death']
         for j in rightLeft:
@@ -57,7 +57,7 @@ class Character(pygame.sprite.Sprite):
         self.image = self.animations[self.facing][self.stance][self.frameIndex]
         self.rect = self.image.get_rect(topleft=pos)
 
-    def animatePlayer(self):
+    def animatePlayer(self): # Iterates through all the images in the characters animations array
         timeGap = 100  # Time waited before resetting image
         self.image = self.animations[self.facing][self.stance][self.frameIndex]  # Update image to match current stance and frame
         if pygame.time.get_ticks() - self.updateTime > timeGap:  # If time since last update has reached timeGap
@@ -71,7 +71,7 @@ class Character(pygame.sprite.Sprite):
                 self.kill()
             self.frameIndex = 0
 
-    def shoot(self):
+    def shoot(self): # Function to create a projectile in front of the character
         yPos = self.rect.y + self.bulletOffsetY
         if self.facing == 0:
             Dir = 1
@@ -81,23 +81,15 @@ class Character(pygame.sprite.Sprite):
             xPos = self.rect.x + self.bulletOffsetXMinus
         return Projectile(xPos, yPos, self.bulletThickness, self.bulletColour, Dir, self.bulletSpeed)
 
-    def shootRate(self):
+    def shootRate(self): # Determines if enough time has passed since the last bulled shot
         if self.timeLastShot + self.bulletCooldown < pygame.time.get_ticks() and not self.dead:
             self.canShoot = True
         else:
             self.canShoot = False
 
-    def fall(self):
+    def fall(self): 
         self.direction.y += self.gravity
         self.rect.y += self.direction.y
-
-    def jump(self):
-        if not self.falling:
-            self.direction.y += self.jumpSpeed
-            self.falling = True
-            self.frameIndex = 0
-            self.stance = 2
-            pygame.mixer.Channel(7).play(playerJump)
 
     def die(self):
         if self.health <= 0:
