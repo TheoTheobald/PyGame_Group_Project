@@ -161,6 +161,7 @@ class Level:
         for enemy in self.enemies:
             if enemy.className == 'boss':
                 if enemy.rect.colliderect(player.rect) and self.playerBossHit + 1000 < pygame.time.get_ticks():
+                    pygame.mixer.Channel(2).play(bossHit)
                     player.health -= 75
                     self.playerBossHit = pygame.time.get_ticks()
 
