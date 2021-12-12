@@ -21,7 +21,7 @@ OS:
 2. MacOS
 
 Recommended screen resolution:
-800 x 400 pixels
+1280 x 768 pixels
 
 
 
