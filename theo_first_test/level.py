@@ -281,13 +281,13 @@ class Level:
         self.display.fill('black')
         self.scrollBG -= self.scrollSpeed  # Background will scroll in an opposite direction of player movement
         bg1 = pygame.image.load('images/background/1.png')
-        bg1 = pygame.transform.scale(bg1, (scrnW * 1.5, 768))
+        bg1 = pygame.transform.scale(bg1, bgTuple)
         bg2 = pygame.image.load('images/background/2.png')
-        bg2 = pygame.transform.scale(bg2, (scrnW * 1.5, 768))
+        bg2 = pygame.transform.scale(bg2, bgTuple)
         bg3 = pygame.image.load('images/background/3.png')
-        bg3 = pygame.transform.scale(bg3, (scrnW * 1.5, 768))
+        bg3 = pygame.transform.scale(bg3, bgTuple)
         bg5 = pygame.image.load('images/background/5.png')
-        bg5 = pygame.transform.scale(bg5, (scrnW * 1.5, 768))
+        bg5 = pygame.transform.scale(bg5, bgTuple)
         for x in range(5):
             self.display.blit(bg1, ((x * bg1.get_width() - 100) - self.scrollBG * 0.4, 0))
             self.display.blit(bg2, ((x * bg2.get_width() - 100) - self.scrollBG * 0.5, 0))

@@ -45,6 +45,7 @@ bossLayout = ['____________________',
 tileSize = 64
 scrnW = 1280
 scrnH = tileSize * len(levelLayout)
+bgTuple = (int(scrnW * 1.5), int(768))
 
 # Colours
 GREEN = pygame.Color(0, 255, 0)
