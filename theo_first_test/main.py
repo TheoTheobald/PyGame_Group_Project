@@ -139,6 +139,9 @@ def instructions():
         rect6.topleft = (0,50)
         scrn.blit(bg, rect6)
         
+        # stating points value of each enemy
+        
+        
         back = pygame.image.load('images/buttons/button4.png')
         back.convert()
         back = pygame.transform.scale(back, (int(back.get_width() * 0.1), int(back.get_height() * 0.1)))
@@ -185,12 +188,6 @@ def game():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if level.teleportPlayer == True:
-                player = level.player.sprite
-                level = Level(bossLayout, scrn)
-                player.rect = level.player.sprite.rect
-                level.player.sprite = player
-                
 
 
         scrn.fill('black')
