@@ -9,7 +9,7 @@ Boss Enemy
 import pygame, os, random
 from settings import *
 from character import Character
-#from random import randomint
+from random import randomint
 
 
 class BossEnemy(Character):
@@ -29,9 +29,8 @@ class BossEnemy(Character):
         
         #Creating variables for horizontal motion of boss
         self.speed = 6
-        self.mean=False #This for ensuring that
-        self.time_boss_motion=200
-
+        self.mean=False #This for ensuring that it does not stop at starting position after it comes right back again
+        #Boss health
         self.totalHealth = 2000
         self.health = 2000
         self.attackCooldown = 500
