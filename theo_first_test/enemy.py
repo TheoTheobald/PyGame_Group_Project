@@ -22,7 +22,7 @@ class Enemy(Character):
         # self.hasSpace = self.checkHasSpace()
         self.getSprites(pos)
         
-
+                            #Attempted to introduce basic enemy movement
     # def checkHasSpace(self):
     #     """This method checks if the enemy has space to move"""
     #     for platformIndex, levelPlatform in enumerate(levelLayout):
