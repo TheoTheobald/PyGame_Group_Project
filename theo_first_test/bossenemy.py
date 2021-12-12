@@ -70,11 +70,13 @@ class BossEnemy(Character):
             if not (self.mean):
                 self.rect.x -= self.speed
                 if self.rect.left < 0:
+                    pygame.mixer.Channel(1).play(bossMove2)
                     self.speed = random.randint(6, 16)
                     self.mean = True
             else:
                 self.rect.x += self.speed
                 if self.rect.x > scrnW - self.image.get_width():
+                    pygame.mixer.Channel(0).play(bossMove)
                     self.speed = random.randint(6, 16)
                     self.mean = False
 
@@ -82,19 +84,6 @@ class BossEnemy(Character):
     def update(self, xShift):
         self.rect.x += xShift
         self.animate()
-        self.horizontal_motion()
+        self.horizontalMotion()
         self.die()
 
-    def horizontal_motion(self):
-        if not (self.mean):
-            self.rect.x -= self.speed
-            if self.rect.left < 0:
-                pygame.mixer.Channel(1).play(bossMove2)
-                self.speed = random.randint(10, 20)
-                self.mean = True
-        else:
-            self.rect.x += self.speed
-            if self.rect.x > scrnW - self.image.get_width():
-                pygame.mixer.Channel(0).play(bossMove)
-                self.speed = random.randint(10, 20)
-                self.mean = False
