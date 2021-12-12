@@ -17,7 +17,6 @@ bg = pygame.image.load('images/background/5.png')
 isMuted = False
 
 
-
 pygame.display.set_caption('KILL THE BOSS')
 font = pygame.font.SysFont("Verdana", 20)
 icon = pygame.image.load('images/icon/icon.png')

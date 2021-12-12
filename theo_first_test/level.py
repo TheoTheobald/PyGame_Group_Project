@@ -32,7 +32,7 @@ class Level:
         self.scrollBG = 0 # Background is not initially moving
         self.saveScoreCheck = 0
 
-        self.redManDead = False # Checks to see if pre-boss enemy is dead
+        self.redManDead = True # Checks to see if pre-boss enemy is dead
         self.teleportPlayer = False # True when the player is to be teleported
         self.gameComplete = False # True when the game has been completed
 
@@ -65,7 +65,7 @@ class Level:
                     portal = Portal((x, y), 'portal')
                     self.items.add(portal)
                 elif cell == 'B':
-                    boss = BossEnemy((x - 60, y + 90))
+                    boss = BossEnemy((x - 60, y - 90))
                     self.enemies.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))
