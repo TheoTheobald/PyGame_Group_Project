@@ -136,9 +136,9 @@ class Level:
 
                 if enemy.dead and not enemy.scoreGiven:  # if bullet kills enemy
                     if enemy.className == 'bigEnemy':
-                        bigEnemyDead.play()
+                        pygame.mixer.Channel(0).play(bigEnemyDead)
                     else:
-                        enemyHit.play()
+                        pygame.mixer.Channel(1).play(enemyHit)
                     player.score += enemy.value  # increment score
                     enemy.scoreGiven = True
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
@@ -180,7 +180,7 @@ class Level:
         for item in self.items.sprites():
             if item.rect.colliderect(player.rect):
                 if item.type == 'healthpack':
-                    getItem.play()
+                    pygame.mixer.Channel(2).play(getItem)
                     if player.health == player.totalHealth:
                         return
                     player.health += 150
@@ -188,15 +188,15 @@ class Level:
                         player.health = player.totalHealth
                     item.kill()
                 if item.type == 'jumpBoost':
-                    getItem.play()
+                    pygame.mixer.Channel(2).play(getItem)
                     player.jumpSpeed -= 6
                     item.kill()
                 if item.type == 'dmgBoost':
-                    getItem.play()
+                    pygame.mixer.Channel(2).play(getItem)
                     player.bulletColour = PURPLE
                     item.kill()
                 if item.type == 'portal' and self.redManDead:
-                    portal.play()
+                    pygame.mixer.Channel(3).play(portal)
                     self.teleportPlayer = True
 
     def checkPlayerPos(self):
@@ -218,9 +218,9 @@ class Level:
                             enemy.shooting = True  # Allows the enemy to shoot
                             enemy.timeLastShot = pygame.time.get_ticks()  # Resets the shot timer
                             if enemy.className == 'bigEnemy':
-                                bigEnemyGrowl.play()
+                                pygame.mixer.Channel(4).play(bigEnemyGrowl)
                             else:
-                                enemyGun.play()
+                                pygame.mixer.Channel(5).play(enemyGun)
                 else:
                     enemy.shooting = False
 

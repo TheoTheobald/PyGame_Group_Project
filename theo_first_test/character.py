@@ -97,7 +97,7 @@ class Character(pygame.sprite.Sprite):
             self.falling = True
             self.frameIndex = 0
             self.stance = 2
-            playerJump.play()
+            pygame.mixer.Channel(7).play(playerJump)
 
     def die(self):
         if self.health <= 0:
