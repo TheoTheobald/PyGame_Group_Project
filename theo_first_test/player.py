@@ -60,8 +60,8 @@ class Player(Character):
 
             if keys[pygame.K_SPACE] and self.canShoot:
                 self.shooting = True
-                playerGun.play()
                 self.timeLastShot = pygame.time.get_ticks()
+                playerGun.play()
             else:
                 self.shooting = False
         else:
