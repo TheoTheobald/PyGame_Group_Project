@@ -10,8 +10,8 @@ import pygame, os, random
 from character import Character
 from settings import *
 
-
 scrn = pygame.display.set_mode((scrnW, scrnH))
+
 
 class BigEnemy(Character):
     className = 'bigEnemy'
@@ -33,7 +33,7 @@ class BigEnemy(Character):
         self.bulletOffsetXMinus = 0
         self.bulletOffsetY = 60
         self.value = 20
-    
+
     def getSprites(self, pos):
         rightLeft = ['right', 'left']
         animationTypes = ['Idle', 'Death']
@@ -67,12 +67,4 @@ class BigEnemy(Character):
 
     def healthBar(self, scrn):
         pygame.draw.rect(scrn, RED, (self.rect.x, self.rect.y - 10, 120, 5))
-        pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health/self.totalHealth)), 5))
-            
-    def update(self, xShift):
-        self.rect.x += xShift
-        self.animate()
-        self.shootRate()
-        self.die()
-    
-            
+        pygame.draw.rect(scrn, GREEN, (self.rect.x, self.rect.y - 10, (120 * (self.health / self.totalHealth)), 5))

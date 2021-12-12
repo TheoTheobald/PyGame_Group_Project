@@ -19,38 +19,39 @@ from items import Item, Portal
 
 class Level:
     def __init__(self, levelLayout, scrn):
-        self.items = pygame.sprite.Group() # Creating groups for each of the sprites, tried to group them by what commonly needs to be updated for that sprite type
+        self.items = pygame.sprite.Group()  # Creating groups for each of the sprites, tried to group them by what commonly needs to be updated for that sprite type
         self.enemies = pygame.sprite.Group()
+        self.bossEnemy = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.tiles = pygame.sprite.Group()
         self.bullets = pygame.sprite.Group()
         self.display = scrn
-        self.placeTiles(levelLayout) # Calls the place tiles function to build the level
+        self.placeTiles(levelLayout)  # Calls the place tiles function to build the level
         self.playerDead = False
-        self.levelLength = len(levelLayout[0]) # Gets length of level to help scrolling stop at edge of screen
-        self.scrollSpeed = 0 # Initially screen is fixed
-        self.scrollBG = 0 # Background is not initially moving
+        self.levelLength = len(levelLayout[0])  # Gets length of level to help scrolling stop at edge of screen
+        self.scrollSpeed = 0  # Initially screen is fixed
+        self.scrollBG = 0  # Background is not initially moving
         self.saveScoreCheck = 0
 
-        self.redManDead = False # Checks to see if pre-boss enemy is dead
-        self.teleportPlayer = False # True when the player is to be teleported
-        self.gameComplete = False # True when the game has been completed
+        self.redManDead = False  # Checks to see if pre-boss enemy is dead
+        self.teleportPlayer = False  # True when the player is to be teleported
+        self.gameComplete = False  # True when the game has been completed
 
-        self.playerBossHit = pygame.time.get_ticks() # prevents player being repeatedly hit by boss - could have been put in boss code tbh
+        self.playerBossHit = pygame.time.get_ticks()  # prevents player being repeatedly hit by boss - could have been put in boss code tbh
 
     def placeTiles(self, layout): # Builds the level
         for rowIndex, row in enumerate(layout): # Iterates through the rows and colums of the levelLayout list in settings
             for colIndex, cell in enumerate(row):
                 x = colIndex * tileSize
                 y = rowIndex * tileSize
-                if cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&': # Places tiles based on the symbol in the list at that index, and places
-                    tile = Tile((x, y), tileSize, cell)                                      # the element at the index*tileSize for x and y
-                    self.tiles.add(tile)                                                     # Adds whatever element we have built to its sprite group
+                if cell >= '0' and cell <= '9' or cell == '£' or cell == '$' or cell == '&':  # Places tiles based on the symbol in the list at that index, and places
+                    tile = Tile((x, y), tileSize, cell)  # the element at the index*tileSize for x and y
+                    self.tiles.add(tile)  # Adds whatever element we have built to its sprite group
                 elif cell == 'P':
                     player = Player(((x + tileSize / 4), y + 9))
                     self.player.add(player)
                 elif cell == 'E':
-                    enemy = Enemy((x, y + 10))
+                    enemy = Enemy((x, y + 10), self.display)
                     self.enemies.add(enemy)
                 elif cell == 'H':
                     healthpack = Item(((x + tileSize / 5), y + 29), 'healthpack')
@@ -66,10 +67,10 @@ class Level:
                     self.items.add(portal)
                 elif cell == 'B':
                     boss = BossEnemy((x - 60, y - 90))
-                    self.enemies.add(boss)
+                    self.bossEnemy.add(boss)
                 elif cell == 'S':
                     bigEnemy = BigEnemy((x - 40, y - 65))
-                    self.enemies.add(bigEnemy)
+                    self.bossEnemy.add(bigEnemy)
 
     def scroll(self):
         player = self.player.sprite # Grabs the players sprite for easier referencing
@@ -78,17 +79,20 @@ class Level:
         xPosLeft = player.rect.left
         xPosRight = player.rect.right
 
-        if (xPos < scrnW / 3 and self.scrollBG > abs(5)) and xDir < 0: # Scrolls left when in first third of screen
+        if (xPos < scrnW / 3 and self.scrollBG > abs(5)) and xDir < 0:  # Scrolls left when in first third of screen
             self.scrollSpeed = 5
             player.speed = 0
-        elif (xPos > (scrnW * 2 / 3) and self.scrollBG < (self.levelLength * tileSize) - scrnW) and xDir > 0: # Scrolls right when in final third of screen
+        elif (xPos > (scrnW * 2 / 3) and self.scrollBG < (
+                self.levelLength * tileSize) - scrnW) and xDir > 0:  # Scrolls right when in final third of screen
             self.scrollSpeed = -5
             player.speed = 0
-        elif (xPosLeft + self.scrollSpeed < 0) and xDir < 0: # Stops the player moving at the left most side of the screen
+        elif (
+                xPosLeft + self.scrollSpeed < 0) and xDir < 0:  # Stops the player moving at the left most side of the screen
             player.speed = 0
-        elif (xPosRight + self.scrollSpeed > scrnW) and xDir > 0: # Stop the player moving at the right most side of the screen
+        elif (
+                xPosRight + self.scrollSpeed > scrnW) and xDir > 0:  # Stop the player moving at the right most side of the screen
             player.speed = 0
-        else:                           # When in middle third player moves as normal
+        else:  # When in middle third player moves as normal
             self.scrollSpeed = 0
             player.speed = 5
 
@@ -101,11 +105,11 @@ class Level:
                 if player.direction.x < 0:              # and set their speed in x to 0
                     player.rect.left = tile.rect.right
                     player.direction.x = 0
-                elif player.direction.x > 0:            # Then the same in reverse for the left
+                elif player.direction.x > 0:  # Then the same in reverse for the left
                     player.rect.right = tile.rect.left
                     player.direction.x = 0
 
-            for bullet in self.bullets.sprites():       # If bullet hits a wall, kill it
+            for bullet in self.bullets.sprites():  # If bullet hits a wall, kill it
                 if tile.rect.colliderect(bullet.rect):
                     bullet.kill()
 
@@ -113,12 +117,12 @@ class Level:
         player = self.player.sprite
         player.fall()
 
-        for tile in self.tiles.sprites():           # Same logic as x collisions but just for up, down, top and bottom
+        for tile in self.tiles.sprites():  # Same logic as x collisions but just for up, down, top and bottom
             if tile.rect.colliderect(player.rect):
                 if player.direction.y > 0:
                     player.rect.bottom = tile.rect.top
                     player.direction.y = 0
-                    player.falling = False          # Falling boolean prevents a 2nd jump in the air, this allows the player to jump again when they land
+                    player.falling = False  # Falling boolean prevents a 2nd jump in the air, this allows the player to jump again when they land
                 elif player.direction.y < 0:
                     player.rect.top = tile.rect.bottom
                     player.direction.y = 0
@@ -126,13 +130,13 @@ class Level:
     def bulletHitsCharacter(self):
         player = self.player.sprite
         for bullet in self.bullets.sprites():
-            if bullet.rect.x > 6000 or bullet.rect.x < 0: # Kills bullets that go too far off the screen - 6000 is probably a tad high
+            if bullet.rect.x > 6000 or bullet.rect.x < 0:  # Kills bullets that go too far off the screen - 6000 is probably a tad high
                 bullet.kill()
-            if bullet.rect.colliderect(player.rect): # If bullet hits player do 10 dmg
+            if bullet.rect.colliderect(player.rect):  # If bullet hits player do 10 dmg
                 player.health -= 10
-                if bullet.colour == LAVA:           # If bullet is from the red dude, do another 10
+                if bullet.colour == LAVA:  # If bullet is from the red dude, do another 10
                     player.health -= 10
-                bullet.kill()                       # Kill bullet
+                bullet.kill()  # Kill bullet
             for enemy in self.enemies.sprites():
 
                 if enemy.dead and not enemy.scoreGiven:  # if bullet kills enemy
@@ -143,18 +147,18 @@ class Level:
                     player.score += enemy.value  # increment score
                     enemy.scoreGiven = True
                 if bullet.rect.colliderect(enemy.rect) and bullet.colour != enemy.bulletColour and not enemy.dead:
-                    enemy.health -= 10                      # If bullet hits enemy take 10 hp
-                    if bullet.colour == PURPLE:             # If player has bullet upgrade (turns bullets purple) take another 10 hp
-                        enemy.health -= 10                  # Kill bullet
+                    enemy.health -= 10  # If bullet hits enemy take 10 hp
+                    if bullet.colour == PURPLE:  # If player has bullet upgrade (turns bullets purple) take another 10 hp
+                        enemy.health -= 10  # Kill bullet
                     bullet.kill()
         # display score to screen
         font = pygame.font.Font('fonts/BarcadeNB.otf', 30)
         text_surface = font.render(f"SCORE {player.score}", True, 'white')
         text_rect = text_surface.get_rect()
         text_rect.topleft = (50, 50)
-        self.display.blit(text_surface, text_rect)   # Writes the score in the top left of the screen
+        self.display.blit(text_surface, text_rect)  # Writes the score in the top left of the screen
 
-    def bossCollision(self): # Boss does contact damage rather than shoots bullets
+    def bossCollision(self):  # Boss does contact damage rather than shoots bullets
         player = self.player.sprite
         for enemy in self.enemies:
             if enemy.className == 'boss':
@@ -164,26 +168,26 @@ class Level:
                     self.playerBossHit = pygame.time.get_ticks()    # Reset hit timer
 
     def redMan(self):
-        redDead = True      # Checks to see if the red dude is dead
+        redDead = True  # Checks to see if the red dude is dead
         for enemy in self.enemies:
             if enemy.className == 'bigEnemy':
                 redDead = False
             else:
                 pass
         if redDead:
-            self.redManDead = True # If he's dead allow teleportation
+            self.redManDead = True  # If he's dead allow teleportation
 
     def pickupItem(self):
         player = self.player.sprite
 
-        for item in self.items.sprites(): # Function that governs all item pickups
+        for item in self.items.sprites():  # Function that governs all item pickups
             if item.rect.colliderect(player.rect):
                 if item.type == 'healthpack':
                     pygame.mixer.Channel(2).play(getItem)
                     if player.health == player.totalHealth:
                         return
                     player.health += 150
-                    if player.health > player.totalHealth: # Basic collision stuff
+                    if player.health > player.totalHealth:  # Basic collision stuff
                         player.health = player.totalHealth
                     item.kill()
                 if item.type == 'jumpBoost':
@@ -209,7 +213,7 @@ class Level:
         player = self.player.sprite
 
         for enemy in self.enemies:
-            if enemy.className == 'boss': # Stops the boss from trying to change directions as he doesn't face anywhere
+            if enemy.className == 'boss':  # Stops the boss from trying to change directions as he doesn't face anywhere
                 pass
             else:
                 if enemy.rect.x + (enemy.image.get_width() / 2) > player.rect.x + (
@@ -230,7 +234,7 @@ class Level:
                 else:
                     enemy.shooting = False
 
-    def checkDeadOrComplete(self): # Checks to see if the game is over, either from death or completion
+    def checkDeadOrComplete(self):  # Checks to see if the game is over, either from death or completion
         player = self.player.sprite
         gameOverFont = pygame.font.Font('fonts/Barcade.otf', 100)
         scoreFont = pygame.font.Font('fonts/Barcade.otf', 60)
@@ -251,7 +255,7 @@ class Level:
         gameContRect.midtop = (scrnW // 2, 550)
         finalScoreRect.midtop = (scrnW // 2, 350)
 
-        if player.dead or self.gameComplete: # Saves the score to the scores file
+        if player.dead or self.gameComplete:  # Saves the score to the scores file
             # save score
             if self.saveScoreCheck < 1:
                 # append score to file
@@ -269,11 +273,11 @@ class Level:
             highScoreRect.midtop = (scrnW // 2, 450)
 
             if player.dead:
-                self.display.blit(gameOver, gameOverRect) # Displays relevant message on screen
+                self.display.blit(gameOver, gameOverRect)  # Displays relevant message on screen
             else:
                 self.display.blit(gameComp, gameCompRect)
             self.display.blit(finalScore, finalScoreRect)
-            self.display.blit(highScoreDisplay,highScoreRect)
+            self.display.blit(highScoreDisplay, highScoreRect)
             self.display.blit(gameCont, gameContRect)
 
 
@@ -321,7 +325,9 @@ class Level:
 
         # Enemy update
         self.enemies.draw(self.display)
-        self.enemies.update(self.scrollSpeed)
+        self.enemies.update(self.scrollSpeed, self.player.sprite)
+        self.bossEnemy.draw(self.display)
+        self.bossEnemy.update(self.scrollSpeed)
         self.checkPlayerPos()
         self.bossCollision()
 
